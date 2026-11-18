@@ -171,8 +171,9 @@ h1.title span{color:var(--cyan)}
           <li><b>Cliquez une province</b> : barre du bas → <b>CONSTRUCTION</b> et <b>PRODUCTION</b>.</li>
           <li><b>Pas de construction = pas de production</b> : base navale pour la marine, usine aéronautique pour les avions.</li>
           <li>Haut-gauche : <b>Journal · Diplomatie · Recherche · Coalitions</b>. Bas : <b>Diplomatie · Provinces · Marché · Recherche · Plus</b>.</li>
-          <li><b>Marché</b> : achetez/vendez pétrole et métaux au prix du jour. <b>Recherche</b> : 5 branches, +6 %/niveau.</li>
-          <li>Victoire : <b>40 pays</b> ou les <b>6 superpuissances</b> éliminées/fusionnées.</li>
+          <li><b>Marché</b> : achetez/vendez pétrole, métaux, <b>blé</b> et <b>métaux rares</b> au prix du jour. <b>Recherche</b> : 5 branches, +6 %/niveau.</li>
+          <li>Haut-droite : <b>7 ressources</b> (argent, métaux, pétrole, blé, rare, main-d'œuvre, or) + <b>points de victoire</b> (1/pays, 3/superpuissance — objectif 120).</li>
+          <li><b>La journée avance seule</b> (minuteur ⏱ en haut à droite) : ⏸ pause, ×1 ×2 ×3 — comme Call of War.</li>
         </ul>
         <button id="playbtn" class="primary" disabled>SÉLECTIONNEZ UN PAYS…</button>
       </div>
@@ -183,12 +184,12 @@ h1.title span{color:var(--cyan)}
   <div class="obox bighelp">
     <h1 class="title" style="font-size:22px;letter-spacing:6px">DOCTRINE <span>D'OPÉRATIONS</span></h1>
     <div class="info">
-      <h3>L'ÉCRAN DE COMMANDEMENT</h3><p>Haut-gauche : votre drapeau + <b>Journal · Diplomatie · Recherche · Coalitions</b>. Haut-droite : <b>Barre de ressources</b> (argent, métaux, pétrole), bouton <b>MARCHÉ</b>, progression vers la victoire, <b>FIN DU TOUR</b>. Milieu : la carte. Bas : <b>DIPLOMATIE · PROVINCES · MARCHÉ · RECHERCHE · PLUS</b>.</p>
+      <h3>L'ÉCRAN DE COMMANDEMENT</h3><p>Haut-gauche : votre drapeau + <b>Journal · Diplomatie · Recherche · Coalitions</b>. Haut-droite : <b>7 ressources</b> (argent, métaux, pétrole, blé, métaux rares, main-d'œuvre, or) avec production/jour en survol, bouton <b>MARCHÉ</b>, <b>points de victoire</b>, minuteur du jour avec <b>⏸ ×1 ×2 ×3</b>, <b>FIN DU TOUR</b>. Milieu : la carte. Bas : <b>DIPLOMATIE · PROVINCES · MARCHÉ · RECHERCHE · PLUS</b>.</p>
       <h3>PROVINCE SÉLECTIONNÉE</h3><p>Cliquez une province (les vôtres ou ennemies) : une barre apparaît en bas avec le nom, la garnison, vos 5 villes et les boutons <b>CONSTRUCTION</b> / <b>PRODUCTION</b> (comme au QG). ✕ ferme la barre.</p>
-      <h3>CONSTRUIRE ET PRODUIRE</h3><p>Caserne → infanterie/motorisée/parachutistes. Usine de chars → blindés + artillerie + lance-roquettes. Usine aéronautique → chasseurs, <b>Rafale</b>, bombardiers, hélicos. Base navale (côte) → torpilleurs, <b>frégate furtive</b>, croiseurs, <b>porte-avions</b>. Chaque chantier dure plusieurs tours.</p>
-      <h3>MARCHÉ & ÉCONOMIE</h3><p>Prix du pétrole et des métaux variables chaque jour. Impôts 0-100 % douanes 0-50 % par voisin : impact immédiat sur vos revenus et vos relations.</p>
+      <h3>CONSTRUIRE ET PRODUIRE</h3><p>Caserne → infanterie/motorisée/parachutistes. <b>Fonderie de munitions</b> → artillerie, lance-roquettes, antiaérien. <b>Usine de chars</b> → chars légers et lourds. Usine aéronautique → chasseurs, <b>Rafale</b>, bombardiers, hélicos. Base navale (côte) → torpilleurs, <b>frégate furtive</b>, croiseurs, <b>porte-avions</b>. <b>Bureau de recrutement</b> → +150 main-d'œuvre/jour. Chaque unité coûte aussi des recrues (👥).</p>
+      <h3>MARCHÉ & ÉCONOMIE</h3><p>Pétrole, métaux, <b>blé</b>, <b>métaux rares</b> : prix variables chaque jour. Impôts 0-100 % douanes 0-50 % par voisin. Le <b>blé</b> nourrit les troupes (pénurie = désertion) ; les <b>rares</b> équipent Rafale et frégates furtives.</p>
       <h3>DIPLOMATIE TOTALE</h3><p>Non-agression → libre circulation → libre-échange → alliance → partage de bases → <b>FUSION de nations</b>. Les alliés répondent à vos appels aux armes.</p>
-      <h3>VICTOIRE</h3><p>Contrôlez <b>40 des 178 pays</b> ou éliminez/fusionnez les <b>6 superpuissances</b>.</p>
+      <h3>VICTOIRE</h3><p>Atteignez <b>120 points de victoire</b> (1 par pays, 3 par superpuissance) ou éliminez/fusionnez les <b>6 superpuissances</b>.</p>
     </div>
     <button id="helpclose" class="primary" style="width:100%;margin-top:16px">COMPRIS — AU COMBAT</button>
   </div>
@@ -215,18 +216,18 @@ infanterie:{n:'Infanterie',d:'land',atk:4,def:8,hp:10,mp:3,cost:{m:120,k:10},up:
 inf_mot:{n:'Inf. motorisée',d:'land',atk:6,def:9,hp:12,mp:4,cost:{m:280,o:15},up:{m:8,o:2}},
 para:{n:'Parachutistes',d:'land',atk:5,def:6,hp:10,mp:3,air:true,cost:{m:240,o:10},up:{m:6}},
 genie:{n:'Génie',d:'land',atk:2,def:5,hp:10,mp:3,eng:true,cost:{m:220,k:20},up:{m:5}},
-char_leger:{n:'Char léger',d:'land',atk:9,def:7,hp:14,mp:4,cost:{m:400,k:40,o:20},up:{m:12,o:3}},
-char_lourd:{n:'Char lourd',d:'land',atk:14,def:16,hp:22,mp:3,cost:{m:800,k:90,o:45},up:{m:22,o:5}},
-artillerie:{n:'Artillerie',d:'land',atk:11,def:3,hp:8,mp:2,cost:{m:360,k:50},up:{m:10,o:1}},
-art_lourde:{n:'Art. lourde',d:'land',atk:19,def:4,hp:10,mp:1,cost:{m:720,k:100,o:15},up:{m:18,o:2}},
+char_leger:{n:'Chars légers',d:'land',atk:9,def:7,hp:14,mp:4,cost:{m:400,k:40,o:20},up:{m:12,o:3}},
+char_lourd:{n:'Chars lourds',d:'land',atk:14,def:16,hp:22,mp:3,cost:{m:800,k:90,o:45},up:{m:22,o:5}},
+artillerie:{n:'Artillerie de campagne',d:'land',atk:11,def:3,hp:8,mp:2,cost:{m:360,k:50},up:{m:10,o:1}},
+art_lourde:{n:'Artillerie lourde',d:'land',atk:19,def:4,hp:10,mp:1,cost:{m:720,k:100,o:15},up:{m:18,o:2}},
 lance_roquettes:{n:'Lance-roquettes',d:'land',atk:15,def:3,hp:8,mp:3,cost:{m:540,k:70,o:20},up:{m:14,o:3}},
-aa:{n:'Anti-aérien',d:'land',atk:2,def:7,hp:10,mp:2,aa:10,cost:{m:320,k:60},up:{m:8}},
+aa:{n:'Antiaérien',d:'land',atk:2,def:7,hp:10,mp:2,aa:10,cost:{m:320,k:60},up:{m:8}},
 chasseur:{n:'Chasseur',d:'air',rng:30,cost:{m:450,k:60,o:35},up:{m:14,o:6}},
 rafale:{n:'Rafale',d:'air',rng:45,cost:{m:1200,k:140,o:90},up:{m:32,o:12}},
-bombardier:{n:'Bombardier',d:'air',rng:35,cost:{m:950,k:110,o:75},up:{m:26,o:10}},
+bombardier:{n:'Bombardier stratégique',d:'air',rng:35,cost:{m:950,k:110,o:75},up:{m:26,o:10}},
 heli_attaque:{n:'Hélicoptère d\'attaque',d:'air',rng:20,cost:{m:520,k:70,o:40},up:{m:16,o:6}},
 heli_trans:{n:'Hélicoptère de transport',d:'air',rng:20,cost:{m:420,k:50,o:30},up:{m:12,o:5}},
-transport_aerien:{n:'Transport aérien',d:'air',rng:40,airlift:true,cost:{m:650,k:90,o:55},up:{m:18,o:8}},
+transport_aerien:{n:'Avion de transport',d:'air',rng:40,airlift:true,cost:{m:650,k:90,o:55},up:{m:18,o:8}},
 torpilleur:{n:'Torpilleur',d:'sea',atk:8,def:5,hp:12,rng:30,cost:{m:320,k:70,o:25},up:{m:10,o:3}},
 fregate_furtive:{n:'Frégate furtive',d:'sea',atk:15,def:13,hp:14,rng:36,stealth:true,cost:{m:900,k:120,o:55},up:{m:22,o:7}},
 destroyer:{n:'Destroyer',d:'sea',atk:14,def:12,hp:18,rng:30,cost:{m:650,k:100,o:45},up:{m:18,o:6}},
@@ -238,10 +239,12 @@ porte_helico:{n:'Porte-hélicoptères',d:'sea',atk:5,def:12,hp:28,rng:30,capHeli
 transport_naval:{n:'Transport naval',d:'sea',atk:2,def:8,hp:20,rng:24,inv:true,cost:{m:480,k:80,o:35},up:{m:12,o:4}},
 cargo:{n:'Cargo',d:'sea',atk:0,def:4,hp:14,rng:30,cargoBonus:2,cost:{m:300,k:50,o:20},up:{m:8,o:2}}
 };
-const LAND_HEAVY=['char_leger','char_lourd','artillerie','art_lourde','lance_roquettes','aa'];
+const LAND_HEAVY=['artillerie','art_lourde','lance_roquettes','aa'];
 const CBUILDINGS={
 caserne:{n:'Caserne',m:400,k:80,t:2},
-usine_armement:{n:'Usine de chars',m:750,k:160,t:3},
+usine_armement:{n:'Fonderie de munitions',m:750,k:160,t:3},
+usine_chars:{n:'Usine de chars',m:800,k:170,t:3},
+recrute:{n:'Bureau de recrutement',m:450,k:0,t:2},
 base_aerienne:{n:'Usine aéronautique',m:650,k:130,t:3},
 base_navale:{n:'Base navale',m:500,k:100,t:3,coastal:true},
 forteresse:{n:'Fortification',m:450,k:90,t:2},
@@ -250,7 +253,8 @@ rail:{n:'Voie ferrée',m:350,k:60,t:2},
 usine:{n:'Industrie',m:500,k:0,t:2},
 raffinerie:{n:'Raffinerie',m:550,k:80,t:2}
 };
-function reqOf(tid){const U=UNITS[tid];if(U.d==='air')return'base_aerienne';if(U.d==='sea')return'base_navale';return LAND_HEAVY.indexOf(tid)>=0?'usine_armement':'caserne';}
+function reqOf(tid){const U=UNITS[tid];if(U.d==='air')return'base_aerienne';if(U.d==='sea')return'base_navale';if(tid==='char_leger'||tid==='char_lourd')return'usine_chars';return LAND_HEAVY.indexOf(tid)>=0?'usine_armement':'caserne';}
+for(const t in UNITS){const U=UNITS[t];if(U.cost.p===undefined)U.cost.p=U.d==='land'?Math.max(20,Math.round(U.cost.m/4)):U.d==='sea'?Math.round(U.cost.m/8):Math.round(U.cost.m/6);if(U.cost.r===undefined&&(U.stealth||t==='rafale'))U.cost.r=Math.round(U.cost.m/20);}
 const POWER_DEFS=[
 {country:'United States of America',color:'#ef4444'},
 {country:'China',color:'#f97316'},
@@ -266,9 +270,11 @@ const TREATY_REQ={peace:[],move:[],trade:[],alliance:[],bases:['alliance'],union
 let countries=[],factions=[],turn=1,nextId=1,treaties={},rel={},sel=-1,logs=[],offers=[],gameOver=false,hoverId=-1,moveMode=null,PL=0,MAJORS=[];
 let unitCount=[],pwCache=[];
 let view={z:1,ox:0,oy:0},drag=null,movedFar=false;
-let mkt={oil:2.2,mat:3.4};
+let mkt={oil:2.2,mat:3.4,food:1.1,rare:7.5};
 let research={inf:0,veh:0,ord:0,air:0,nav:0};
 let intel={};
+const CLOCK_SEC=30;
+let gameClock={left:CLOCK_SEC,speed:1,paused:false};
 const RES_NAME={inf:'Infanterie',veh:'Blindés',ord:'Artillerie',air:'Aviation',nav:'Marine'};
 const BRANCH={infanterie:'inf',inf_mot:'inf',para:'inf',genie:'inf',char_leger:'veh',char_lourd:'veh',artillerie:'ord',art_lourde:'ord',lance_roquettes:'ord',aa:'ord'};
 function domOf(tid){const U=UNITS[tid];if(U.d==='air')return'air';if(U.d==='sea')return'nav';return BRANCH[tid]||'inf';}
@@ -276,12 +282,14 @@ function resMult(tid,fid){if(fid!==PL)return 1;return 1+0.06*(research[domOf(tid
 function buyResearch(b){const lv=research[b]||0;if(lv>=5)return false;const c={m:600*(lv+1),k:180*(lv+1)};if(!afford(factions[PL],c))return false;pay(factions[PL],c);research[b]=lv+1;log('🔬 Recherche achevée : '+RES_NAME[b]+' niveau '+(lv+1)+' (+'+(6*(lv+1))+' % sur cette branche).','good');return true;}
 function marketTrade(res,dir,qty){
 const f=factions[PL];
-const price=res==='oil'?mkt.oil:mkt.mat;
-if(dir==='buy'){const c=qty*price;if(f.money<c)return false;f.money-=c;if(res==='oil')f.oil+=qty;else f.mat+=qty;}
-else{const have=res==='oil'?f.oil:f.mat;if(have<qty)return false;if(res==='oil')f.oil-=qty;else f.mat-=qty;f.money+=Math.round(qty*price*0.9);}
-log('💱 Marché : '+(dir==='buy'?'achat':'vente')+' de '+qty+(res==='oil'?' pétrole':' métaux')+' à '+price+' $/u.');
+if(!(res in mkt)||!(res in f))return false;
+const price=mkt[res];
+if(dir==='buy'){const c=qty*price;if(f.money<c)return false;f.money-=c;f[res]+=qty;}
+else{if(f[res]<qty)return false;f[res]-=qty;f.money+=Math.round(qty*price*0.9);}
+log('💱 Marché : '+(dir==='buy'?'achat':'vente')+' de '+qty+' × '+RES_MK[res]+' à '+price.toFixed(2)+' $/u.');
 return true;
 }
+const RES_MK={oil:'pétrole',mat:'métaux',food:'blé',rare:'métaux rares'};
 function spyReport(fid){
 if(factions[PL].money<500)return false;
 factions[PL].money-=500;
@@ -370,27 +378,33 @@ if(f!==playerCountryName&&!powers.some(p=>p.country===f)&&WD.gdp[f]){powers[pi]=
 }
 }
 countries=WD.countries.map((c,i)=>({id:i,n:c.n,name:WD.fr[c.n]||c.n,cx:c.cx,cy:c.cy,rings:c.r,ngb:WD.adj[i]||[],coastal:WD.locked.indexOf(c.n)<0,cities:genCities({id:i,n:c.n,rings:c.r,ct:c.ct}),g:{},owner:i}));
-factions=WD.countries.map((c,i)=>({id:i,name:WD.fr[c.n]||c.n,color:colorFor(i,P),isPlayer:i===P,alive:true,money:0,mat:0,oil:0,tax:30,tar:{},home:c.n}));
+factions=WD.countries.map((c,i)=>({id:i,name:WD.fr[c.n]||c.n,color:colorFor(i,P),isPlayer:i===P,alive:true,money:0,mat:0,oil:0,food:0,rare:0,mp:0,gold:0,tax:30,tar:{},home:c.n}));
 for(const p of powers){const idx=WD.countries.findIndex(cc=>cc.n===p.country);if(idx>=0)MAJORS.push(idx);}
 for(const a of factions){rel[a.id]={};for(const b of factions)if(b.id!==a.id)rel[a.id][b.id]=-10+ri(40);}
 const home=countries[P];
-factions[P].money=6000;factions[P].mat=1200;factions[P].oil=800;
+factions[P].money=6000;factions[P].mat=1200;factions[P].oil=800;factions[P].food=600;factions[P].rare=200;factions[P].mp=500;factions[P].gold=0;
 for(const f of factions){
 if(f.isPlayer)continue;
 const h=countries[f.id];
 f.money=Math.round((4*Math.sqrt(gdpOf(h))+0.5*popOf(h))*6);
 f.mat=Math.round(280+Math.sqrt(gdpOf(h))*6);
 f.oil=Math.round(200+oilOf(h)*40);
+f.food=Math.round(popOf(h)*4);
+f.rare=Math.round(60+ri(80));
+f.mp=Math.round(popOf(h)*10);
+f.gold=30;
 }
+gameClock={left:CLOCK_SEC,speed:1,paused:false};
 for(const c of countries){
 const o=c.owner;
 for(let i=0;i<4;i++)spawn('infanterie',o,c);
 spawn('char_leger',o,c);spawn('artillerie',o,c);
 if(o===P)spawn('inf_mot',P,c);
 const capc=c.cities[0];
-capc.b.caserne=true;capc.b.usine=true;
+capc.b.caserne=true;capc.b.usine=true;capc.b.usine_armement=true;
+if(MAJORS.indexOf(o)>=0){capc.b.usine_chars=true;capc.b.base_aerienne=true;capc.b.recrute=true;}
 if(MAJORS.indexOf(o)>=0&&c.coastal)capc.b.base_navale=true;
-if(MAJORS.indexOf(o)>=0)capc.b.base_aerienne=true;
+if(o===P)capc.b.recrute=true;
 }
 log('🌍 Campagne lancée. Vous dirigez '+home.name+' — '+home.cities.length+' villes sous votre autorité.','good');
 log('🏗️ Cliquez vos villes pour CONSTRUIRE (caserne, ports…) puis PRODUIRE. Pas de construction = pas de production.','dip');
@@ -407,13 +421,19 @@ function enemiesIn(c,f){return unitsIn(c).filter(u=>atWar(f,u.o));}
 function factionUnits(fid){const r=[];for(const c of countries){const g=c.g[fid];if(g)for(const u of g)r.push(u);}return r;}
 function findUnit(uid){for(const c of countries){for(const oid in c.g){const g=c.g[oid];for(const u of g)if(u.id===uid)return u;}}return null;}
 function provOf(u){for(const c of countries){const g=c.g[u.o];if(g&&g.indexOf(u)>=0)return c;}return null;}
-function afford(f,cost){return f.money>=(cost.m||0)&&f.mat>=(cost.k||0)&&f.oil>=(cost.o||0);}
-function pay(f,cost){f.money-=cost.m||0;f.mat-=cost.k||0;f.oil-=cost.o||0;}
-function costStr(cost){const p=[];if(cost.m)p.push(cost.m+' M');if(cost.k)p.push(cost.k+' mat');if(cost.o)p.push(cost.o+' pét');return p.join(' · ');}
+function afford(f,cost){return f.money>=(cost.m||0)&&f.mat>=(cost.k||0)&&f.oil>=(cost.o||0)&&f.food>=(cost.f||0)&&f.rare>=(cost.r||0)&&f.mp>=(cost.p||0);}
+function pay(f,cost){f.money-=cost.m||0;f.mat-=cost.k||0;f.oil-=cost.o||0;f.food-=cost.f||0;f.rare-=cost.r||0;f.mp-=cost.p||0;}
+function costStr(cost){const p=[];if(cost.m)p.push(cost.m+' $');if(cost.k)p.push(cost.k+' ⚒');if(cost.o)p.push(cost.o+' 🛢');if(cost.f)p.push(cost.f+' 🌾');if(cost.r)p.push(cost.r+' 💎');if(cost.p)p.push(cost.p+' 👥');return p.join(' · ');}
 function powerOf(fid){let s=0;for(const u of factionUnits(fid))s+=UNITS[u.t].atk+UNITS[u.t].def;return s;}
 function fortMult(c){return Math.min(1.6,1+0.12*c.cities.reduce((s,ct)=>s+(ct.b.forteresse?1:0),0));}
+function resourceOf(c){
+if((WD.oil[c.n]||0)>=30)return'🛢';
+if((WD.mat[c.n]||0)>=90)return'⚒';
+return'🌾';
+}
+function rareOf(c){let h=0;const s=c.n;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;const q=h%10;return(q>=7?2+(h%4)*0.6:0.35)+((WD.mat[s]||0)>=100?3:0);}
 function incomeOf(f){
-let money=0,mat=0,oil=0;
+let money=0,mat=0,oil=0,food=0,rare=0,mpIn=0;
 const fid=f.id;
 for(const c of countries){
 if(c.owner!==fid)continue;
@@ -421,7 +441,8 @@ let mult=0.5+f.tax/100;
 for(const city of c.cities){if(city.b.autoroute)mult+=0.12;if(city.b.rail)mult+=0.08;}
 money+=(4*Math.sqrt(gdpOf(c))+0.5*popOf(c))*mult;
 mat+=matOf(c)*0.55;oil+=oilOf(c)*0.08;
-for(const city of c.cities){if(city.b.usine)mat+=7;if(city.b.raffinerie)oil+=4.5;if(city.b.port)money+=3;}
+food+=popOf(c)*0.5;rare+=rareOf(c);mpIn+=popOf(c)*8;
+for(const city of c.cities){if(city.b.usine){mat+=7;food+=3;}if(city.b.raffinerie)oil+=4.5;if(city.b.port)money+=3;if(city.b.recrute)mpIn+=150;}
 for(const nid of c.ngb){
 const n=countries[nid];
 if(n.owner<0||n.owner===fid)continue;
@@ -436,9 +457,9 @@ money+=vol*0.35+vol*eff/100;
 let cargo=0;
 for(const c of countries){const g=c.g[fid];if(g)for(const u of g)if(UNITS[u.t].cargoBonus)cargo+=UNITS[u.t].cargoBonus;}
 money+=cargo*2;
-let um=0,uo=0;
-for(const c of countries){const g=c.g[fid];if(g)for(const u of g){um+=UNITS[u.t].up.m||0;uo+=UNITS[u.t].up.o||0;}}
-return{money:Math.round(money),mat:Math.round(mat),oil:Math.round(oil),um,uo};
+let um=0,uo=0,uf=0;
+for(const c of countries){const g=c.g[fid];if(g)for(const u of g){const U=UNITS[u.t];um+=U.up.m||0;uo+=U.up.o||0;uf+=U.up.f!==undefined?U.up.f:(U.d==='land'?1:0.8);}}
+return{money:Math.round(money),mat:Math.round(mat),oil:Math.round(oil),food:Math.round(food),rare:Math.round(rare*10)/10,mpIn:Math.round(mpIn),um,uo,uf:Math.round(uf),gold:1+Math.round(money/2000)};
 }
 function tradeFlows(fid){
 const flows={};
@@ -460,8 +481,9 @@ return Object.keys(flows).map(o=>({o:+o,inc:flows[o]}));
 function applyEconomy(f){
 if(!f||!f.alive)return;
 const e=incomeOf(f);
-f.money+=e.money-e.um;f.mat+=e.mat;f.oil+=e.oil-e.uo;
+f.money+=e.money-e.um;f.mat+=e.mat;f.oil+=e.oil-e.uo;f.food+=e.food-e.uf;f.rare+=e.rare;f.mp+=e.mpIn;f.gold+=e.gold||1;
 if(f.money<0){f.money=0;const us=factionUnits(f.id);if(us.length){removeUnit(pick(us));if(f.isPlayer)toast('Trésorerie vide : une unité a déserté !');}}
+if(f.food<0){f.food=0;const us=factionUnits(f.id);if(us.length&&rf()<0.5){removeUnit(pick(us));if(f.isPlayer)toast('🌾 Pénurie de blé : une unité a déserté !');}}
 if(f.oil<0)f.oil=0;
 for(const o of factions){
 if(!o.alive||o.id===f.id)continue;
@@ -697,7 +719,7 @@ const g=c.g[src.id];
 if(g){for(const u of g)u.o=dst.id;(c.g[dst.id]=c.g[dst.id]||[]).push(...g);delete c.g[src.id];}
 for(const city of c.cities)city.q=[];
 }
-dst.money+=src.money;dst.mat+=src.mat;dst.oil+=src.oil;
+dst.money+=src.money;dst.mat+=src.mat;dst.oil+=src.oil;dst.food+=src.food;dst.rare+=src.rare;dst.mp+=src.mp;dst.gold+=src.gold;
 src.alive=false;
 for(const o of factions)if(o.alive&&o.id!==dst.id&&o.id!==src.id)relOfGro(o.id,dst.id,-15);
 log('🍭 FUSION : '+src.name+' rejoint '+dst.name+' !','good');
@@ -708,7 +730,7 @@ function aiDevelop(f){
 const own=countries.filter(c=>c.owner===f.id);
 if(!own.length)return;
 const c=pick(own);
-const order=['caserne','usine_armement','base_navale','base_aerienne','usine','raffinerie','autoroute','rail','forteresse'];
+const order=['caserne','usine_armement','usine_chars','recrute','base_navale','base_aerienne','usine','raffinerie','autoroute','rail','forteresse'];
 const city=c.cities[ri(c.cities.length)];
 for(const k of order){
 const B=CBUILDINGS[k];
@@ -786,18 +808,22 @@ for(const c of countries)for(const oid in c.g)for(const u of c.g[oid])u.mp=UNITS
 turn++;
 mkt.oil=Math.max(0.8,Math.min(6,mkt.oil*(0.92+rf()*0.16)));
 mkt.mat=Math.max(1,Math.min(9,mkt.mat*(0.92+rf()*0.16)));
+mkt.food=Math.max(0.3,Math.min(3,mkt.food*(0.9+rf()*0.2)));
+mkt.rare=Math.max(3,Math.min(20,mkt.rare*(0.9+rf()*0.2)));
 for(const k in intel)if(intel[k]<=turn)delete intel[k];
 offers=offers.filter(o=>factions[o.from].alive);
 checkDeadAll();
 checkVictory();
 renderAll();
 }
+const VP_GOAL=120;
+function vpOf(fid){let v=0;for(const c of countries)if(c.owner===fid)v+=1+(MAJORS.indexOf(c.id)>=0?2:0);return v;}
 function checkVictory(){
-const mine=countries.reduce((s,c)=>s+(c.owner===PL?1:0),0);
+const mine=vpOf(PL);
 const majorsAlive=MAJORS.filter(id=>factions[id]&&factions[id].alive).length;
 if(mine===0){gameOver=true;showEnd('DÉFAITE','Votre nation a été rayée de la carte du monde.');}
 else if(majorsAlive===0){gameOver=true;showEnd('VICTOIRE TOTALE','Les 6 superpuissances ont été éliminées ou fusionnées. L\'ère PAX MUNDI commence.');}
-else if(mine>=40){gameOver=true;showEnd('VICTOIRE','Votre nation contrôle '+mine+' pays. L\'ère PAX MUNDI commence.');}
+else if(mine>=VP_GOAL){gameOver=true;showEnd('VICTOIRE','Vos '+mine+' points de victoire décident du sort du monde. L\'ère PAX MUNDI commence.');}
 }
 function showEnd(title,txt){
 const t=document.getElementById('ovtitle'),x=document.getElementById('ovtext');
@@ -962,6 +988,18 @@ ctx.shadowBlur=0;
 }
 }
 }
+if(view.z>1){
+ctx.font='11px sans-serif';
+ctx.textAlign='left';
+for(const c of countries){
+const city=c.cities[0];if(!city)continue;
+const p0=projPt(city.lon,city.lat);
+if(p0[0]<-10||p0[1]<-10||p0[0]>cw+10||p0[1]>ch+10)continue;
+ctx.shadowColor='rgba(0,0,0,0.9)';ctx.shadowBlur=4;
+ctx.fillText(resourceOf(c),p0[0]+7,p0[1]-5);
+ctx.shadowBlur=0;
+}
+}
 for(const c of countries){
 const sp=projPt(c.cx,c.cy);
 const us=unitsIn(c);
@@ -994,7 +1032,10 @@ const net=e.money-e.um;
 return '<div class="rbox" title="Argent (production/net par jour)"><small>$ ARGENT</small><b>'+Math.round(f.money)+'</b><span class="'+(net>=0?'up':'down')+'">'+(net>=0?'+':'')+net+'</span></div>'+
 '<div class="rbox" title="Métaux (production par jour)"><small>⚒ MÉTAUX</small><b>'+Math.round(f.mat)+'</b><span class="up">+'+e.mat+'</span></div>'+
 '<div class="rbox" title="Pétrole (production net par jour)"><small>🛢 PÉTROLE</small><b>'+Math.round(f.oil)+'</b><span class="'+(e.oil-e.uo>=0?'up':'down')+'">'+(e.oil-e.uo>=0?'+':'')+(e.oil-e.uo)+'</span></div>'+
-'<div class="rbox"><small>VICTOIRE</small><b>'+countries.reduce((s,c)=>s+(c.owner===PL?1:0),0)+'/40</b><span class="up">PAYS</span></div>';
+'<div class="rbox" title="Blé : nourrit vos troupes (production/net par jour)"><small>🌾 BLÉ</small><b>'+Math.round(f.food)+'</b><span class="'+(e.food-e.uf>=0?'up':'down')+'">'+(e.food-e.uf>=0?'+':'')+(e.food-e.uf)+'</span></div>'+
+'<div class="rbox" title="Métaux rares : équipements avancés et unités furtives"><small>💎 RARES</small><b>'+Math.round(f.rare)+'</b><span class="up">+'+e.rare+'</span></div>'+
+'<div class="rbox" title="Main-d\'œuvre : recrues disponibles pour équiper vos unités"><small>👥 MAIN-D\'ŒUVRE</small><b>'+Math.round(f.mp)+'</b><span class="up">+'+e.mpIn+'</span></div>'+
+'<div class="rbox" title="Or : prestige de votre empire (+1 minimum par jour)"><small>🏅 OR</small><b>'+Math.round(f.gold)+'</b><span class="up">+'+(e.gold||1)+'</span></div>';
 }
 function unitLines(units){
 return units.map(u=>{
@@ -1060,7 +1101,7 @@ for(let i=0;i<c.cities.length;i++)h+='<button class="chip small'+(i===cityIdx?' 
 h+='</div>';
 h+='<div class="chead"><small>'+(mine?'VOTRE VILLE':'VILLE DE '+(c.owner>=0&&factions[c.owner]?factions[c.owner].name.toUpperCase():'NEUTRE'))+(city.cap?' · CAPITALE':'')+'</small></div>';
 h+='<div class="card"><h4>CONSTRUCTION</h4><div class="btns">'+buildings+'</div>';
-if(mine)h+='<small>⚠️ Chaque unité exige son bâtiment : caserne → infanterie, usine d\'armement → chars/artillerie, base aérienne → avions, base navale → bateaux.</small>';
+if(mine)h+='<small>⚠️ Chaque unité exige son bâtiment : caserne → infanterie, usine de chars → blindés, fonderie de munitions → artillerie, usine aéronautique → avions, base navale → bateaux. Chaque unité coûte aussi des recrues (👥).</small>';
 h+='</div>';
 if(mine){
 h+='<div class="card"><h4>PRODUCTION</h4><select id="prodsel" style="width:100%">'+units+'</select>';
@@ -1119,20 +1160,26 @@ toast(moveMode.kind==='land'?'Cliquez un pays FRONTALIER (traits pointillés).':
 };
 }
 function renderResBar(){
+function renderClock(){
+const tl=document.getElementById('turnlab');
+if(!tl)return;
+if(!countries.length){tl.textContent='';return;}
+tl.textContent='JOUR '+turn+' · '+(gameClock.paused?'⏸':('⏱ '+Math.max(0,Math.ceil(gameClock.left))+'s'));
+}
 const tb=document.getElementById('resbar');
 if(tb)tb.innerHTML=countries.length?fmt(PL):'';
 const tl=document.getElementById('turnlab');
 if(tl){
 if(!countries.length)tl.textContent='';
 else{
-const mine=countries.reduce((s,c)=>s+(c.owner===PL?1:0),0);
+renderClock();
+const mine=vpOf(PL);
 const majDown=(factions.length?MAJORS.filter(id=>factions[id]&&!factions[id].alive).length:0);
-const pct=Math.min(100,Math.round(mine/40*100));
-tl.innerHTML='JOUR '+turn;
+const pct=Math.min(100,Math.round(mine/VP_GOAL*100));
 const vb=document.getElementById('victfill');
 const vt=document.getElementById('victlab');
 if(vb)vb.style.width=pct+'%';
-if(vt)vt.textContent='VICTOIRE '+mine+'/40 PAYS · MAJORS '+majDown+'/6';
+if(vt)vt.textContent='POINTS DE VICTOIRE '+mine+'/'+VP_GOAL+' · MAJORS '+majDown+'/6';
 }
 }
 const fb=document.getElementById('flagchip');
@@ -1272,6 +1319,14 @@ h+='<div class="card"><h4>MÉTAUX — <span class="up">'+mkt.mat.toFixed(2)+' $/
 h+='<button data-mk="mat:buy:100">Acheter 100</button><button data-mk="mat:buy:500">Acheter 500</button>';
 h+='<button data-mk="mat:sell:100">Vendre 100</button><button data-mk="mat:sell:500">Vendre 500</button>';
 h+='</div><small>Stock : '+Math.round(f.mat)+' métaux</small></div>';
+h+='<div class="card"><h4>BLÉ — <span class="up">'+mkt.food.toFixed(2)+' $/u</span></h4><div class="btns">';
+h+='<button data-mk="food:buy:200">Acheter 200</button><button data-mk="food:buy:1000">Acheter 1000</button>';
+h+='<button data-mk="food:sell:200">Vendre 200</button><button data-mk="food:sell:1000">Vendre 1000</button>';
+h+='</div><small>Stock : '+Math.round(f.food)+' blé · nourrit vos troupes</small></div>';
+h+='<div class="card"><h4>MÉTAUX RARES — <span class="up">'+mkt.rare.toFixed(2)+' $/u</span></h4><div class="btns">';
+h+='<button data-mk="rare:buy:50">Acheter 50</button><button data-mk="rare:buy:200">Acheter 200</button>';
+h+='<button data-mk="rare:sell:50">Vendre 50</button><button data-mk="rare:sell:200">Vendre 200</button>';
+h+='</div><small>Stock : '+Math.round(f.rare)+' métaux rares · unités avancées et furtives</small></div>';
 h+='<div class="card"><h4>IMPÔTS NATIONAUX : '+f.tax+'%</h4><input type="range" min="0" max="100" value="'+f.tax+'" id="taxr" style="width:100%"><small>Impact immédiat chaque tour.</small></div>';
 h+='<div class="card"><h4>REVENUS & DOUANES FRONTIÈRES</h4>';
 const e=incomeOf(f);
@@ -1554,6 +1609,18 @@ const rc=document.getElementById('markettogglebtn');
 if(rc)rc.onclick=()=>{if(!countries.length)return;toggleWin('market',renderMarketWin);};
 const eb=document.getElementById('endbtn');
 if(eb)eb.onclick=endTurn;
+function updSpeedUI(){
+const ids=['spd1','spd2','spd3'];
+for(const id of ids){const e=document.getElementById(id);if(e&&e.classList&&e.classList.toggle)e.classList.toggle('on',!gameClock.paused&&gameClock.speed===+id.slice(3));}
+const pb=document.getElementById('pausebtn');if(pb&&pb.classList&&pb.classList.toggle)pb.classList.toggle('on',gameClock.paused);
+}
+const pbs=document.getElementById('pausebtn');
+if(pbs)pbs.onclick=()=>{if(!countries.length)return;gameClock.paused=!gameClock.paused;updSpeedUI();renderClock();};
+for(const sp of [['spd1',1],['spd2',2],['spd3',3]]){
+const el=document.getElementById(sp[0]);
+if(el)el.onclick=()=>{if(!countries.length)return;gameClock.paused=false;gameClock.speed=sp[1];updSpeedUI();renderClock();};
+}
+updSpeedUI();
 const hb=document.getElementById('helpbtn');
 if(hb)hb.onclick=()=>{const o=document.getElementById('helpov');if(o)o.style.display='flex';};
 const hc=document.getElementById('helpclose');
@@ -1597,6 +1664,12 @@ function boot(){
 bindUI();
 bindInput();
 setInterval(()=>{if(countries.length)render();},500);
+setInterval(()=>{
+if(!countries.length||gameOver||gameClock.paused)return;
+gameClock.left-=gameClock.speed;
+if(gameClock.left<=0){gameClock.left=CLOCK_SEC;endTurn();}
+else{renderClock();}
+},1000);
 }
 boot();
 </script>
