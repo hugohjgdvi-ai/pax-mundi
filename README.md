@@ -1,6 +1,6 @@
 # PAX MUNDI — Commandement Mondial ⚡
 
-Jeu de **grande stratégie mondiale** dans le navigateur : carte du monde réelle avec **178 pays jouables**, **900 villes avec régions**, 26 types d'unités, diplomatie complète avec **tous les pays du monde**, économie réelle (PIB, population, pétrole, minéraux) et système **construction → production**.
+Jeu de **grande stratégie mondiale** dans le navigateur, interface façon QG 1942 : carte du monde réelle avec **178 pays jouables**, **890 VRAIES villes** (Paris, Tokyo, Washington… avec leurs vraies coordonnées), 26 types d'unités, diplomatie avec **tous les pays du monde**, **marché boursier**, **recherche** 5 branches, **renseignement militaire** et système **construction → production**.
 
 ## 🎮 Jouer
 
@@ -14,16 +14,16 @@ Jeu de **grande stratégie mondiale** dans le navigateur : carte du monde réell
 ## 🌍 Le jeu
 
 1. **Choisissez votre pays réel** au démarrage (France, Brésil, Japon, Nigéria… les 178 sont disponibles)
-2. Vous ne contrôlez QUE ce pays — avec **5 villes et leurs régions environnantes**
-3. Carte zoomable/déplaçable style poste de commandement futuriste, mer bleu foncé
-4. Interface : **4 boutons en bas** (Nations, Économie, Diplomatie, Journal) qui ouvrent des **fenêtres flottantes** déplaçables
+2. Vous ne contrôlez QUE ce pays — avec ses **5 vraies villes** (vraies capitales et métropoles, vraies coordonnées)
+3. Interface façon QG : **haut-gauche** drapeau + **Journal · Diplomatie · Recherche · Coalitions** ; **haut-droite** barre de ressources, marché et progression de victoire ; **barre du bas** à 5 onglets
+4. **Cliquez une province** : une barre du bas apparaît avec le nom, la garnison, les villes et les boutons **CONSTRUCTION / PRODUCTION**
 
-### 🏙️ Villes et construction (NOUVEAU)
-- **5 villes par pays** : une capitale (pré-équipée) + 4 villes à développer
-- **Cliquez sur une de vos villes** → fenêtre Construction & Production
-- **Nouvelles constructions** : caserne, usine d'armement, base aérienne, base navale (côte), forteresse, autoroute, voie ferrée, usine, raffinerie
-- **Pas de construction = pas de production** : une base navale est requise pour produire un bateau, une base aérienne pour un avion, une usine d'armement pour un char lourd
-- Tout peut être construit depuis n'importe quelle ville de votre empire
+### 🏙️ Provinces, vraies villes et construction
+- **5 vraies villes par pays** (données réelles : capitale nationale en premier, puis les plus grandes métropoles, position géographique exacte)
+- **Cliquez une province** (la vôtre ou ennemie) → barre du bas : nom, garnison, villes cliquables, **CONSTRUCTION / PRODUCTION**
+- **Onglet PROVINCES** (bas) : liste de toutes vos provinces, construction/production en un clic
+- Bâtiments (noms façon 1942) : Caserne, Usine de chars, Usine aéronautique, Base navale (côte), Fortification, Infrastructure, Voie ferrée, Industrie, Raffinerie
+- **Pas de construction = pas de production** : Base navale → marine, Usine aéronautique → avions, Usine de chars → blindés et artillerie
 
 ### ⚔️ 26 unités
 - **Terre** (10) : infanterie, motorisée, parachutistes, génie, chars légers/lourds, artillerie, art. lourde, lance-roquettes, anti-aérien
@@ -37,10 +37,13 @@ Chaque mesure a un **impact réel** : le libre-échange augmente le commerce fro
 
 ### 💰 Économie
 - Revenus basés sur le **PIB et la population réels** de chaque pays
-- Ressources : trésorerie, matériaux, pétrole
+- Ressources : **argent, métaux, pétrole** (barre de ressources haut-droite)
+- **MARCHÉ boursier** : achetez/vendez pétrole et métaux, **prix variables chaque jour**
 - **Impôts 0–100 %** avec effet immédiat, **droits de douane 0–50 %** sur chaque importation
-- Infrastructures rentables : autoroutes, voies ferrées, ports, usines, raffineries
+- Infrastructures rentables : Infrastructure, Voie ferrée, Industrie, Raffinerie
 - **Commerce frontalier** uniquement avec les pays en paix, dopé par libre-échange et réduit par douanes
+- **RECHERCHE** (5 branches : Infanterie, Blindés, Artillerie, Aviation, Marine) : +6 % de puissance au combat par niveau
+- **ESPIONNAGE** (menu PLUS) : dossiers complets sur une nation pour 500 $
 
 ### 🏆 Victoire
 Contrôler **40 des 178 pays**, ou éliminer/fusionner les **6 superpuissances** (États-Unis, Chine, Russie, Inde, Brésil, Royaume-Uni).
