@@ -1,28 +1,30 @@
-# PAX MUNDI — Grande Stratégie
+# PAX MUNDI — Commandement Mondial ⚡
 
-Jeu de grande stratégie tour par tour dans le navigateur, inspiré de Call of War, étendu avec une diplomatie profonde, une économie riche et 26 types d'unités.
+Jeu de **grande stratégie mondiale** dans le navigateur : carte du monde réelle avec **178 pays**, 6 superpuissances IA, 26 types d'unités, diplomatie profonde et économie réelle (PIB, population, pétrole, minéraux).
 
 ## 🎮 Jouer
 
-Aucune installation : ouvrez simplement **`index.html`** dans votre navigateur (double-clic).
+**Aucune installation** : ouvrez `index.html` dans votre navigateur (fichier unique autonome).
 
-## 🚀 Jouer en ligne (optionnel)
+### En ligne
+`Settings → Pages → Branch: main → Save` puis jouez sur `https://hugohjgdvi-ai.github.io/pax-mundi/`
 
-Avec GitHub Pages : `Settings → Pages → Branch: main → Save`. Le jeu sera accessible sur `https://hugohjgdvi-ai.github.io/pax-mundi/` après 1-2 minutes.
+## 🌍 Le jeu
 
-## 🕹 Comment jouer
+1. **Choisissez votre pays réel** au démarrage (France, Brésil, Japon, Nigéria… tous disponibles)
+2. Vous ne contrôlez QUE ce pays — le reste du monde est neutre ou tenu par les 6 grandes puissances (États-Unis, Chine, Russie, Inde, Brésil, Royaume-Uni)
+3. Carte zoomable/déplaçable style poste de commandement futuriste
 
-- **Cliquez** une province pour la sélectionner, cochez vos unités, puis **« Déplacer / Attaquer »** et cliquez la destination (adjacente pour terre/mer, à distance pour l'air).
-- **Fin du tour ▶** : les IA jouent, les revenus tombent.
-- **But** : contrôlez 55 % du monde par la conquête **ou** la diplomatie (fusions de pays).
-
-### Unités
-- **Terre** : infanterie, motorisée, parachutistes, génie (–25 % coût bâtiments), chars légers/lourds, artillerie, art. lourde, lance-roquettes, anti-aérien
-- **Air** : chasseur, **Rafale** (opère depuis les porte-avions), bombardier, hélicos d'attaque/transport, transport aérien (aéroportage)
-- **Mer** : torpilleur, **frégate furtive**, sous-marin, destroyer, croiseur, cuirassé, **porte-avions**, **porte-hélicoptères**, transport naval (débarquements), cargo
+### 26 unités
+- **Terre** (10) : infanterie, motorisée, parachutistes, génie, chars légers/lourds, artillerie, art. lourde, lance-roquettes, anti-aérien
+- **Air** (5) : chasseur, **Rafale**, bombardier, hélicos d'attaque/transport — frappes longue distance
+- **Mer** (8) : torpilleurs, **frégate furtive**, destroyers, sous-marins, croiseurs, cuirassés, **porte-avions** (Rafale embarqués), **porte-hélicoptères**, transports d'assaut amphibie, cargos
 
 ### Diplomatie
-Paix/non-agression · **libre circulation des personnes** · **libre-échange** · alliance · **partage de bases militaires** (vos Rafale appontent sur les porte-avions alliés) · **FUSION de pays** (relations ≥ 85 + tous les traités + puissance inférieure).
+Non-agression · **libre circulation** · **libre-échange** · alliance · **partage de bases militaires** · **FUSION de nations** — et droit de douane 0-50 % sur les importations rivales.
 
-### Économie & infrastructures
-Impôts réglables, **taxes douanières par pays (0-50 %)**, commerce dynamique, ports, aéroports, **canaux** (les navires traversent la terre), **autoroutes**, **voies ferrées**, usines, raffineries.
+### Économie
+Revenus basés sur le **PIB et la population réels** de chaque pays ; ressources : trésorerie, matériaux, pétrole ; impôts 0-100 % ; usines, raffineries, autoroutes, voies ferrées, ports, aéroports.
+
+### Victoire
+Contrôler **45 des 178 pays** ou éliminer/fusionner les 6 superpuissances.
