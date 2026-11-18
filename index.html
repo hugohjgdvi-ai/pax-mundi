@@ -961,6 +961,15 @@ function renderProvBar(){
   if(p.cap>=0)h+='<div class="brow"><span>★ CAPITALE</span><span class="ok">oui</span></div>';
   h+='<div class="brow"><span>Garnison</span><b>'+p.mil+'</b></div>';
   if(p.captured&&p.captured>0)h+='<div class="brow"><span>Occupation</span><b>'+Math.round(p.captured)+'%</b></div><div class="progtr"><div class="progfd" style="width:'+Math.min(100,p.captured)+'%"></div></div>';
+  if(!mine&&factions[p.owner]&&factions[p.owner].alive&&!gameOver){
+    const st=relOf(PL,p.owner);
+    if(st==='war'){
+      h+='<div class="brow"><span style="color:#e06050">⚔️ EN GUERRE</span><span class="nk">attaque ce secteur !</span></div>';
+    }else{
+      h+='<div style="margin-top:6px"><button class="btn gold" style="width:100%" data-pg="'+p.pg+'" data-war="'+p.owner+'">⚔️ DÉCLARER LA GUERRE À '+C[p.owner].n.toUpperCase()+'</button></div>';
+    }
+    h+='<div class="nk" style="margin-top:6px">Pour attaquer : sélectionne tes armées (clic sur leur blason, ou rectangle), puis clic droit sur cette province. Sois en guerre, sinon elles ne font que marcher.</div>';
+  }
   h+='</div>';
   if(mine){
     h+='<div class="pvsec"><h4>CONSTRUCTION</h4>';
@@ -1219,6 +1228,7 @@ function bindUI(){
     const p=PROVS[+pg];
     if(t.getAttribute('data-bld')){if(queueB(p,{b:t.getAttribute('data-bld')}))renderAll();else toast('Construction impossible (ressources)');}
     else if(t.getAttribute('data-unit')){if(queueB(p,{u:t.getAttribute('data-unit')}))renderAll();else toast('Production impossible (ressources/requis)');}
+    else if(t.getAttribute('data-war')){declareWar(PL,+t.getAttribute('data-war'));renderAll();}
   });
   // menus haut gauche
   byId('m_journal').onclick=()=>openWin('JOURNAL',jurnalHTML());
