@@ -66,7 +66,7 @@ select,input[type=text],input[type=number]{background:#0d151d;color:var(--txt);b
 #toasts{position:absolute;bottom:70px;left:50%;transform:translateX(-50%);z-index:60;display:flex;flex-direction:column;gap:4px;align-items:center}
 .toast{background:rgba(20,31,43,.95);border:1px solid var(--gold);color:var(--gold2);padding:6px 14px;font-size:12px;border-radius:3px}
 /* ===== overlays ===== */
-.ov{position:absolute;inset:0;background:rgba(8,14,20,.96);z-index:90;display:flex;align-items:center;justify-content:center;flex-direction:column}
+.ov{position:absolute;inset:0;background:rgba(8,14,20,.86);z-index:90;display:flex;align-items:center;justify-content:center;flex-direction:column}
 .ovcard{width:560px;max-width:92vw;max-height:86vh;display:flex;flex-direction:column;background:var(--pan);border:1px solid var(--gold);padding:22px 26px;box-shadow:0 0 60px rgba(0,0,0,.8)}
 .ovcard h1{color:var(--gold2);letter-spacing:3px;font-size:26px;text-align:center;margin-bottom:4px}
 .ovcard h2{color:#8fa3b5;font-weight:normal;font-size:12px;text-align:center;margin-bottom:14px}
@@ -724,6 +724,9 @@ function draw(){
   const vx0=unprojX(0)-5,vx1=unprojX(Wpx)+5;
   const vyB=unprojY(Hpx)-5;
   const vyA=unprojY(0)+5;
+  // ----- monde géographique : projection lon/lat -> pixels -----
+  ctx.save();
+  ctx.setTransform(cam.z,0,0,-cam.z,Wpx/2-cam.x*cam.z,Hpx/2+cam.y*cam.z);
   // couche de fond : contour complet du pays (masque les trous de simplification)
   for(const ci of countryDrawOrder()){
     const c=C[ci];
@@ -746,7 +749,7 @@ function draw(){
     ctx.fill(p.path);
   }
   // bordures pays (épaisses claires)
-  ctx.lineWidth=Math.max(1.2,Math.min(3,cam.z*0.09));
+  ctx.lineWidth=Math.max(1.2,Math.min(3,cam.z*0.09))/cam.z;
   for(const ci of countryDrawOrder()){
     const provs=provIdxByCi[ci];if(!provs.length)continue;
     let drawIt=false;
@@ -758,13 +761,14 @@ function draw(){
   }
   // bordures provinces (fines) seulement en zoom proche
   if(cam.z>=3){
-    ctx.lineWidth=0.5;ctx.strokeStyle='rgba(10,20,30,0.35)';
+    ctx.lineWidth=0.6/cam.z;ctx.strokeStyle='rgba(10,20,30,0.4)';
     for(const p of PROVS){
       const bb=p.bb;
       if(bb[2]<vx0||bb[0]>vx1)continue;
       ctx.stroke(p.path);
     }
   }
+  ctx.restore(); // retour en pixels écran
   // villes
   for(const p of PROVS){
     if(!p.city)continue;
@@ -1288,14 +1292,14 @@ function loop(ts){
   draw();
 }
 function boot(){
-  buildWorldStart();
+  buildWorld();
+  buildPaths();
   bindMap();
   bindUI();
   renderStartList();
   requestAnimationFrame(loop);
   setInterval(()=>{if(PL>=0&&!gameOver){renderResBar();renderClock();}},1000);
 }
-function buildWorldStart(){/* liste pays pour écran de départ */}
 if(typeof document!=='undefined'&&document.getElementById&&document.getElementById('map')){
   boot();
 }
