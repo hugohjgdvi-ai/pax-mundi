@@ -49,6 +49,12 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);font:13px/
 .progtr{height:6px;background:#0d151d;border:1px solid var(--line);margin-top:2px}
 .progfd{height:100%;background:var(--grn);width:0%}
 /* ===== cartes construction / production ===== */
+.imgp{width:42px;height:42px;object-fit:cover;border-radius:6px;display:block;background:#0f1822}
+.cname{cursor:pointer;text-decoration:underline dotted rgba(240,214,147,.5)}
+.cname:hover{color:var(--gold2)!important}
+.fchead{display:flex;align-items:center;gap:10px;padding-bottom:9px;border-bottom:1px solid var(--line);margin-bottom:9px}
+.fchead img{width:56px;height:38px;object-fit:cover;border:1px solid #000;box-shadow:0 0 0 1px var(--gold);border-radius:2px}
+.fchead b{font-size:15px;letter-spacing:1px}
 .ptabs{display:flex;gap:2px;padding:6px 10px 0;border-bottom:1px solid #263542;margin:0 -10px}
 .ptab{flex:1;text-align:center;font-size:9px;padding:7px 2px;color:#7b8b9a;cursor:pointer;border-bottom:2px solid transparent;letter-spacing:.4px;white-space:nowrap;user-select:none}
 .ptab.on{color:var(--gold2);border-bottom-color:var(--gold)}
@@ -802,10 +808,14 @@ function draw(){
       const px=projX(c.x),py=projY(c.y);
       if(px<0||px>Wpx||py<0||py>Hpx)continue;
       if(c.cap){
-        ctx.fillStyle='#f0d693';ctx.beginPath();ctx.arc(px,py,3.2,0,6.3);ctx.fill();
-        ctx.strokeStyle='#141f2b';ctx.lineWidth=1;ctx.stroke();
+        // icône CAPITALE : tête de soldat (casque + visage)
+        ctx.beginPath();ctx.arc(px,py-0.4,2.7,0,6.3);ctx.fillStyle='#f0d693';ctx.fill();
+        ctx.strokeStyle='#141f2b';ctx.lineWidth=0.8;ctx.stroke();
+        ctx.beginPath();ctx.arc(px,py-0.8,3.3,Math.PI,0);ctx.closePath();ctx.fillStyle='#8a6d2b';ctx.fill();
+        ctx.strokeStyle='#141f2b';ctx.stroke();
+        ctx.beginPath();ctx.moveTo(px-4.2,py-0.8);ctx.lineTo(px+4.2,py-0.8);ctx.strokeStyle='#5c4920';ctx.lineWidth=1.4;ctx.stroke();
         ctx.fillStyle='#e8e4d8';ctx.font='bold 10px Verdana';ctx.textAlign='center';
-        if(cam.z>=2.6)ctx.fillText('★ '+c.name,px,py-7);
+        if(cam.z>=2.6)ctx.fillText('★ '+c.name,px,py-9);
       }else{
         ctx.fillStyle='#dfe6ec';ctx.beginPath();ctx.arc(px,py,2.2,0,6.3);ctx.fill();
         ctx.strokeStyle='#141f2b';ctx.stroke();
@@ -1037,6 +1047,20 @@ const SEC_UNITS={
   nav:['torpilleur','fregate_furtive','destroyer','sous_marin','croiseur','cuirasse','porte_avions','porte_helico','transport_naval','cargo']
 };
 let ptab='build';
+// ---------- VRAIES photos des unités (Wikipédia, chargées en ligne ; SVG dessiné en secours) ----------
+const PHOTO={infanterie:'Infantry',inf_mot:'Motorized infantry',para:'Paratrooper',genie:'Combat engineer',char_leger:'M551 Sheridan',char_lourd:'Leopard 2',artillerie:'Howitzer',art_lourde:'PzH 2000',lance_roquettes:'M142 HIMARS',aa:'2K12 Kub',chasseur:'Dassault Rafale',rafale:'Dassault Rafale',bombardier:'B-2 Spirit',heli_attaque:'Boeing AH-64 Apache',heli_trans:'Boeing CH-47 Chinook',transport_aerien:'Lockheed C-130 Hercules',torpilleur:'Missile boat',fregate_furtive:'La Fayette-class frigate',destroyer:'Arleigh Burke-class destroyer',sous_marin:'Virginia-class submarine',croiseur:'Ticonderoga-class cruiser',cuirasse:'Iowa-class battleship',porte_avions:'Nimitz-class aircraft carrier',porte_helico:'USS Wasp (LHD-1)',transport_naval:'San Antonio-class amphibious transport dock',cargo:'Container ship'};
+const photoCache={};
+function photoIcon(tid,svg){
+  const t=PHOTO[tid];if(!t)return svg;
+  const u=photoCache[t];
+  if(u)return '<img class="imgp" src="'+u+'" onerror="this.outerHTML=\''+svg.replace(/"/g,'&quot;')+'\'">';
+  if(window.__LIVE__&&typeof fetch==='function'){
+    fetch('https://en.wikipedia.org/api/rest_v1/page/summary/'+encodeURIComponent(t))
+      .then(r=>r.json()).then(j=>{if(j&&j.thumbnail&&j.thumbnail.source){photoCache[t]=j.thumbnail.source;if(provSel>=0)renderProvBar();}})
+      .catch(()=>{});
+  }
+  return svg;
+}
 function cardHTML(icon,name,lvl,cost,tm,btn){
   let h='<div class="bcard"><div class="bicon">'+icon+'</div><div class="bmain">';
   h+='<div class="btl"><span class="bname">'+name+'</span>'+(lvl?'<span class="blvl">'+lvl+'</span>':'')+'</div>';
@@ -1060,10 +1084,7 @@ function renderProvBar(){
   const mine=p.owner===PL;
   const f=factions[p.owner];
   let h='<h3>'+(p.city&&p.city[0]?p.city[0].name:p.n)+' · '+C[p.ci].n+'</h3>';
-  h+='<div class="pvsec"><h4>ÉTAT</h4><div class="brow"><b style="color:'+(f?f.color:'#f0d693')+';font-size:13px">'+(f?nameOf(p.owner):'—')+'</b></div>';
-  if(p.cap>=0)h+='<div class="brow"><span>★ CAPITALE</span><span class="ok">oui</span></div>';
-  h+='<div class="brow"><span>Garnison</span><b>'+p.mil+'</b></div>';
-  if(p.captured&&p.captured>0)h+='<div class="brow"><span>Occupation</span><b>'+Math.round(p.captured)+'%</b></div><div class="progtr"><div class="progfd" style="width:'+Math.min(100,p.captured)+'%"></div></div>';
+  if(p.captured&&p.captured>0)h+='<div class="pvsec"><h4>OCCUPATION</h4><div class="brow"><span>Contrôle</span><b>'+Math.round(p.captured)+'%</b></div><div class="progtr"><div class="progfd" style="width:'+Math.min(100,p.captured)+'%"></div></div></div>';
   if(!mine&&factions[p.owner]&&factions[p.owner].alive&&!gameOver){
     const st=relOf(PL,p.owner);
     if(st==='war'){
@@ -1098,10 +1119,10 @@ function renderProvBar(){
         const c=U.cost;
         const ok=affordOk(factions[PL],c);
         if(!p.b[req]){
-          h+='<div class="bcard locked"><div class="bicon">'+svgI(USVG[tid]||'')+'</div><div class="bmain"><div class="btl"><span class="bname">'+U.n+'</span></div><div class="bcost">'+svgCost(c)+'</div></div>'+lockBtn(CBUILDINGS[req].n)+'</div>';
+          h+='<div class="bcard locked"><div class="bicon">'+photoIcon(tid,svgI(USVG[tid]||''))+'</div><div class="bmain"><div class="btl"><span class="bname">'+U.n+'</span></div><div class="bcost">'+svgCost(c)+'</div></div>'+lockBtn(CBUILDINGS[req].n)+'</div>';
         }else{
           const btn='<button class="bbuild" data-unit="'+tid+'" data-pg="'+p.pg+'"'+(ok?'':' disabled')+'>'+(ok?'PRODUIRE':'RESSOURCES')+'</button>';
-          h+=cardHTML(svgI(USVG[tid]||''),U.n,'',svgCost(c),'',btn);
+          h+=cardHTML(photoIcon(tid,svgI(USVG[tid]||'')),U.n,'',svgCost(c),'',btn);
         }
       }
       h+='</div>';
@@ -1165,9 +1186,30 @@ function renderDipWin(){
     if(st==='war')bts='<button class="btn" data-peace="'+i+'">Paix</button>';
     else bts='<button class="btn" data-war="'+i+'">Guerre</button> <button class="btn" data-ally="'+i+'">Alliance</button>';
     bts+=' <button class="btn" data-fusion="'+i+'">Fusion</button> <button class="btn" data-spy="'+i+'">🕵️</button>';
-    h+='<div class="wrow"><span style="color:'+factions[i].color+'">'+nameOf(i)+'</span><span class="'+(st==='war'?'stwar':st==='ally'?'stally':'stpeace')+'">'+(st==='war'?'GUERRE':st==='ally'?'ALLIÉ':'Paix')+'</span><span>'+bts+'</span></div>';
+    h+='<div class="wrow"><span class="cname" data-ctry="'+i+'" style="color:'+factions[i].color+'">'+nameOf(i)+'</span><span class="'+(st==='war'?'stwar':st==='ally'?'stally':'stpeace')+'">'+(st==='war'?'GUERRE':st==='ally'?'ALLIÉ':'Paix')+'</span><span>'+bts+'</span></div>';
   }
   openWin('DIPLOMATIE',h);
+}
+// ---------- fiche pays (clic sur un nom en diplomatie) ----------
+function countryInfoWin(i){
+  const f=factions[i];
+  const ps=PROVS.filter(p=>p.owner===i);
+  const cap=ps.find(p=>p.cap>=0);
+  const garn=ps.reduce((s,p)=>s+p.mil,0);
+  const arm=armies.filter(a=>a.fid===i&&!a.dead).length;
+  let maxG=1;for(const p2 of PROVS)maxG+=p2.mil;
+  const pw=Math.round(garn/maxG*10000)/100;
+  let h='<div class="fchead"><img src="https://flagcdn.com/w80/'+(ISO2[C[i].n]&&ISO2[C[i].n]!=='@'?ISO2[C[i].n]:'xx')+'.png" onerror="this.style.display=\'none\'" crossorigin="anonymous"><b style="color:'+f.color+'">'+nameOf(i).toUpperCase()+'</b></div>';
+  h+='<div class="wrow"><span>Capitale</span><b>'+(cap&&cap.city&&cap.city[0]?cap.city[0].name:'—')+'</b></div>';
+  h+='<div class="wrow"><span>Puissance économique</span><b>PIB ~ '+(Math.round(gdpOf(i)))+' Md $</b></div>';
+  h+='<div class="wrow"><span>Puissance militaire</span><b>'+pw+' % du monde</b></div>';
+  h+='<div class="wrow"><span>Garnison (total des régions)</span><b>'+garn+'</b></div>';
+  h+='<div class="wrow"><span>Armées en campagne</span><b>'+arm+'</b></div>';
+  h+='<div class="wrow"><span>Régions tenues</span><b>'+ps.length+'</b></div>';
+  if(ps.length)h+='<div class="pvsec" style="border:none"><h4>RÉGIONS</h4>';
+  for(const p of ps.slice(0,40))h+='<div class="wrow"><span>'+(p.city&&p.city[0]?p.city[0].name:p.n)+'</span><span class="nk">garnison '+p.mil+'</span><span><button class="btn" data-goto="'+p.pg+'">Voir</button></span></div>';
+  if(ps.length)h+='</div>';
+  openWin(nameOf(i).toUpperCase(),h);
 }
 function renderProvsWin(){
   let h='';
@@ -1325,6 +1367,7 @@ function bindUI(){
     if(g('mk')){const[res,dir,qty]=g('mk').split(':');if(marketTrade(res,dir,+qty))refreshAll();else toast('Marché refusé (fonds insuffisants)');}
     else if(g('res')){if(buyResearch(g('res')))refreshAll();else toast('Recherche refusée (ressources)');}
     else if(g('win')){renderWinFor(g('win'));}
+    else if(g('ctry')){countryInfoWin(+g('ctry'));}
     else if(g('war')){declareWar(PL,+g('war'));refreshAll();}
     else if(g('peace')){makePeace(PL,+g('peace'));refreshAll();}
     else if(g('ally')){const o=+g('ally');setRel(PL,o,'ally');toast('🤝 Alliance avec '+nameOf(o));refreshAll();}
@@ -1437,6 +1480,7 @@ function loop(ts){
   draw();
 }
 function boot(){
+  window.__LIVE__=true;
   buildWorld();
   buildPaths();
   bindMap();
