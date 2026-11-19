@@ -1060,7 +1060,7 @@ function renderProvBar(){
   const mine=p.owner===PL;
   const f=factions[p.owner];
   let h='<h3>'+(p.city&&p.city[0]?p.city[0].name:p.n)+' · '+C[p.ci].n+'</h3>';
-  h+='<div class="pvsec"><h4>ÉTAT</h4><div class="brow"><span>Contrôleur</span><b style="color:'+(f?f.color:'#888')+'">'+(f?nameOf(p.owner):'—')+'</b></div>';
+  h+='<div class="pvsec"><h4>ÉTAT</h4><div class="brow"><b style="color:'+(f?f.color:'#f0d693')+';font-size:13px">'+(f?nameOf(p.owner):'—')+'</b></div>';
   if(p.cap>=0)h+='<div class="brow"><span>★ CAPITALE</span><span class="ok">oui</span></div>';
   h+='<div class="brow"><span>Garnison</span><b>'+p.mil+'</b></div>';
   if(p.captured&&p.captured>0)h+='<div class="brow"><span>Occupation</span><b>'+Math.round(p.captured)+'%</b></div><div class="progtr"><div class="progfd" style="width:'+Math.min(100,p.captured)+'%"></div></div>';
@@ -1378,9 +1378,23 @@ function jurnalHTML(){
   for(const j of jurnal.slice(0,50))h+='<div class="wrow"><span class="cmin">J'+j.t+'</span><span>'+j.x+'</span></div>';
   return h||'<p>Rien à signaler.</p>';
 }
-// ---------- démarrage ----------
+// ---------- drapeaux : VRAIES photos (flagcdn.com), motif dessiné seulement en secours ----------
+const ISO2={"Afghanistan":"af","Angola":"ao","Albania":"al","United Arab Emirates":"ae","Argentina":"ar","Armenia":"am","Australia":"au","Austria":"at","Azerbaijan":"az","Burundi":"bi","Belgium":"be","Benin":"bj","Burkina Faso":"bf","Bangladesh":"bd","Bulgaria":"bg","The Bahamas":"bs","Bosnia and Herzegovina":"ba","Belarus":"by","Belize":"bz","Bermuda":"bm","Bolivia":"bo","Brazil":"br","Brunei":"bn","Bhutan":"bt","Botswana":"bw","Central African Republic":"cf","Canada":"ca","Switzerland":"ch","Chile":"cl","China":"cn","Ivory Coast":"ci","Cameroon":"cm","Democratic Republic of the Congo":"cd","Republic of the Congo":"cg","Colombia":"co","Costa Rica":"cr","Cuba":"cu","Northern Cyprus":"@","Cyprus":"cy","Czech Republic":"cz","Germany":"de","Djibouti":"dj","Denmark":"dk","Dominican Republic":"do","Algeria":"dz","Ecuador":"ec","Egypt":"eg","Eritrea":"er","Spain":"es","Estonia":"ee","Ethiopia":"et","Finland":"fi","Fiji":"fj","Falkland Islands":"fk","France":"fr","Gabon":"ga","United Kingdom":"gb","Georgia":"ge","Ghana":"gh","Guinea":"gn","Gambia":"gm","Guinea Bissau":"gw","Equatorial Guinea":"gq","Greece":"gr","Greenland":"gl","Guatemala":"gt","French Guiana":"gf","Guyana":"gy","Honduras":"hn","Croatia":"hr","Haiti":"ht","Hungary":"hu","Indonesia":"id","India":"in","Ireland":"ie","Iran":"ir","Iraq":"iq","Iceland":"is","Israel":"il","Italy":"it","Jamaica":"jm","Jordan":"jo","Japan":"jp","Kazakhstan":"kz","Kenya":"ke","Kyrgyzstan":"kg","Cambodia":"kh","South Korea":"kr","Kosovo":"xk","Kuwait":"kw","Laos":"la","Lebanon":"lb","Liberia":"lr","Libya":"ly","Sri Lanka":"lk","Lesotho":"ls","Lithuania":"lt","Luxembourg":"lu","Latvia":"lv","Morocco":"ma","Moldova":"md","Madagascar":"mg","Mexico":"mx","Macedonia":"mk","Mali":"ml","Malta":"mt","Myanmar":"mm","Montenegro":"me","Mongolia":"mn","Mozambique":"mz","Mauritania":"mr","Malawi":"mw","Malaysia":"my","Namibia":"na","New Caledonia":"nc","Niger":"ne","Nigeria":"ng","Nicaragua":"ni","Netherlands":"nl","Norway":"no","Nepal":"np","New Zealand":"nz","Oman":"om","Pakistan":"pk","Panama":"pa","Peru":"pe","Philippines":"ph","Papua New Guinea":"pg","Poland":"pl","Puerto Rico":"pr","North Korea":"kp","Portugal":"pt","Paraguay":"py","Qatar":"qa","Romania":"ro","Russia":"ru","Rwanda":"rw","Western Sahara":"eh","Saudi Arabia":"sa","Sudan":"sd","South Sudan":"ss","Senegal":"sn","Solomon Islands":"sb","Sierra Leone":"sl","El Salvador":"sv","Somaliland":"@","Somalia":"so","Republic of Serbia":"rs","Suriname":"sr","Slovakia":"sk","Slovenia":"si","Sweden":"se","Swaziland":"sz","Syria":"sy","Chad":"td","Togo":"tg","Thailand":"th","Tajikistan":"tj","Turkmenistan":"tm","East Timor":"tl","Trinidad and Tobago":"tt","Tunisia":"tn","Turkey":"tr","Taiwan":"tw","United Republic of Tanzania":"tz","Uganda":"ug","Ukraine":"ua","Uruguay":"uy","United States of America":"us","Uzbekistan":"uz","Venezuela":"ve","Vietnam":"vn","Vanuatu":"vu","West Bank":"ps","Yemen":"ye","South Africa":"za","Zambia":"zm","Zimbabwe":"zw"};
+const flagOK={};
+function flagURL(ci){const code=ISO2[C[ci].n];return code&&code!=='@'?'https://flagcdn.com/w80/'+code+'.png':null;}
 function drawFlag(ci){
-  const cv=document.getElementById('flagchip');if(!cv||!cv.getContext)return;
+  const cv=document.getElementById('flagchip');if(!cv)return;
+  const u=flagURL(ci);
+  if(u){
+    const img=new Image();
+    img.onload=()=>{try{if(!cv.getContext)throw 0;const c=cv.getContext('2d');c.drawImage(img,0,0,34,23);c.strokeStyle='#000';c.strokeRect(0.5,0.5,33,22);flagOK[ci]=true;}catch(e){flagFallback(ci,cv);}};
+    img.onerror=()=>flagFallback(ci,cv);
+    img.src=u;return;
+  }
+  flagFallback(ci,cv);
+}
+function flagFallback(ci,cv){
+  if(!cv||!cv.getContext)return;
   const c=cv.getContext('2d');
   const f=factions[ci];
   c.fillStyle=f.color;c.fillRect(0,0,34,23);
