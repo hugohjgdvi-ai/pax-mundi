@@ -99,6 +99,11 @@ select,input[type=text],input[type=number]{background:#0d151d;color:var(--txt);b
 .toast{background:rgba(20,31,43,.95);border:1px solid var(--gold);color:var(--gold2);padding:6px 14px;font-size:12px;border-radius:3px}
 /* ===== overlays ===== */
 .ov{position:absolute;inset:0;background:rgba(8,14,20,.86);z-index:90;display:flex;align-items:center;justify-content:center;flex-direction:column}
+#startov{background:linear-gradient(rgba(6,12,20,.45),rgba(6,12,20,.9)),url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Into_the_Jaws_of_Death_23-0455M_edit.jpg/1280px-Into_the_Jaws_of_Death_23-0455M_edit.jpg') center/cover no-repeat}
+#startov .ovcard{background:rgba(10,17,27,.9);box-shadow:0 0 90px rgba(0,0,0,.9)}
+.ovbadge{margin:-6px 0 12px;padding:7px 10px;background:rgba(200,60,40,.92);color:#fff;font-size:10px;letter-spacing:2px;text-align:center;border-radius:4px}
+.ovbadge small{display:block;letter-spacing:.5px;opacity:.85;margin-top:2px;text-transform:none;font-weight:normal}
+h1#t1{text-shadow:0 2px 18px rgba(0,0,0,.8)}
 .ovcard{width:560px;max-width:92vw;max-height:86vh;display:flex;flex-direction:column;background:var(--pan);border:1px solid var(--gold);padding:22px 26px;box-shadow:0 0 60px rgba(0,0,0,.8)}
 .ovcard h1{color:var(--gold2);letter-spacing:3px;font-size:26px;text-align:center;margin-bottom:4px}
 .ovcard h2{color:#8fa3b5;font-weight:normal;font-size:12px;text-align:center;margin-bottom:14px}
@@ -134,9 +139,6 @@ select,input[type=text],input[type=number]{background:#0d151d;color:var(--txt);b
   </div>
   <div id="dayrow">
     <button class="btn spdbtn" id="pausebtn" title="Pause">⏸</button>
-    <button class="btn spdbtn on" id="spd1" title="Vitesse x1">×1</button>
-    <button class="btn spdbtn" id="spd2" title="Vitesse x2">×2</button>
-    <button class="btn spdbtn" id="spd3" title="Vitesse x3">×3</button>
     <span id="turnlab">JOUR 1 · ⏱ 30s</span>
     <button class="btn gold" id="endbtn">Fin de journée</button>
   </div>
@@ -153,6 +155,7 @@ select,input[type=text],input[type=number]{background:#0d151d;color:var(--txt);b
 <div id="toasts"></div>
 <div class="ov" id="startov">
   <div class="ovcard">
+    <div class="ovbadge">6 JUIN 1944 · DÉBARQUEMENT EN NORMANDIE<small>« Into the Jaws of Death » — Robert F. Sargent · photo authentique</small></div>
     <h1>PAX MUNDI</h1>
     <h2>Commander comme un état-major · Monde réel · ~3 000 régions réelles</h2>
     <input type="text" id="searchinput" placeholder="Rechercher un pays…" style="margin-bottom:8px">
@@ -163,10 +166,8 @@ select,input[type=text],input[type=number]{background:#0d151d;color:var(--txt);b
 <div class="ov hidden" id="helpov">
   <div class="ovcard">
     <h1 style="font-size:20px">DOCTRINE</h1>
-    <div class="helpcols">
-      <div><h4>Armées</h4><ul><li>Les troupes sont indépendantes : clique sur leur blason sur la carte, ou trace un rectangle pour en sélectionner plusieurs.</li><li>Clic droit (ou clic gauche) sur une cible : la flèche d'ordre apparaît.</li><li>Attaque des RÉGIONS et des VILLES — jamais un pays entier.</li><li>Occupe une région ennemie sans défense pour l'annexer progressivement.</li></ul></div>
-      <div><h4>Empire</h4><ul><li>Clique une région : CONSTRUCTION et PRODUCTION à gauche.</li><li>7 ressources : argent, métaux, pétrole, blé, métaux rares, main-d'œuvre, or.</li><li>La journée dure 30 s en temps réel : ⏸ ×1 ×2 ×3.</li><li>120 points de victoire, bâtiments 1942, bourse avec le monde.</li></ul></div>
-    </div>
+    <div class="helpcols"><div><h4>Armées & ordres</h4><ul><li>Clique sur le blason d’une armée (ou trace un rectangle) : le panneau d’armée s’ouvre avec les vraies photos et les stats (vitesse, dégâts, PV, portée).</li><li>Boutons ATTAQUER / DÉPLACER / SOIGNER, puis ☰ MODE DE COMBAT : 🛡️ Défensif, ⚔️ Offensif, 🔥 Feu de représailles, ⏳ En attente (retarder).</li><li>ATTAQUER frappe depuis la PORTÉE MAXIMALE (artillerie, marine et aviation frappent de très loin). Frapper une région ennemie détruit des bâtiments et fait chuter son MORAL /100.</li><li>En temps de guerre, une troupe terrestre qui atteint la mini-capitale régionale (✦) conquiert la région.</li><li>Moral ≤ 20 : révolte possible — un voisin influent peut récupérer la région !</li></ul></div></div>
+      <div><h4>Empire</h4><ul><li>Clique une région : construction et production en onglets (INFRASTRUCTURES / INFANTERIE / BLINDÉS / ARTILLERIE / AÉRONAUTIQUE / NAVAL), avec vraies photos.</li><li>7 ressources : argent, métaux, pétrole, blé, métaux rares, main-d’œuvre, or.</li><li>TEMPS RÉEL CALL OF WAR : 1 jour de jeu = 24 heures réelles, SANS accélération (⏸ pour la pause).</li><li>120 points de victoire, bourse mondiale, diplomatie complète, mode EN LIGNE : PLUS → créer une salle et partager le code.</li></ul></div></div>
     <button class="btn gold" id="endhelp" style="margin-top:12px">COMPRIS</button>
   </div>
 </div>
@@ -179,34 +180,35 @@ select,input[type=text],input[type=number]{background:#0d151d;color:var(--txt);b
 'use strict';
 const WD=WORLDDATA;
 const UNITS={
-infanterie:{n:'Infanterie',d:'land',atk:4,def:8,hp:10,mp:3,cost:{m:120,k:10},up:{m:4}},
-inf_mot:{n:'Inf. motorisée',d:'land',atk:6,def:9,hp:12,mp:4,cost:{m:280,o:15},up:{m:8,o:2}},
-para:{n:'Parachutistes',d:'land',atk:5,def:6,hp:10,mp:3,air:true,cost:{m:240,o:10},up:{m:6}},
-genie:{n:'Génie',d:'land',atk:2,def:5,hp:10,mp:3,eng:true,cost:{m:220,k:20},up:{m:5}},
-char_leger:{n:'Chars légers',d:'land',atk:9,def:7,hp:14,mp:4,cost:{m:400,k:40,o:20},up:{m:12,o:3}},
-char_lourd:{n:'Chars lourds',d:'land',atk:14,def:16,hp:22,mp:3,cost:{m:800,k:90,o:45},up:{m:22,o:5}},
-artillerie:{n:'Artillerie de campagne',d:'land',atk:11,def:3,hp:8,mp:2,cost:{m:360,k:50},up:{m:10,o:1}},
-art_lourde:{n:'Artillerie lourde',d:'land',atk:19,def:4,hp:10,mp:1,cost:{m:720,k:100,o:15},up:{m:18,o:2}},
-lance_roquettes:{n:'Lance-roquettes',d:'land',atk:15,def:3,hp:8,mp:3,cost:{m:540,k:70,o:20},up:{m:14,o:3}},
-aa:{n:'Antiaérien',d:'land',atk:2,def:7,hp:10,mp:2,aa:10,cost:{m:320,k:60},up:{m:8}},
-chasseur:{n:'Chasseur',d:'air',rng:30,cost:{m:450,k:60,o:35},up:{m:14,o:6}},
-rafale:{n:'Rafale',d:'air',rng:45,cost:{m:1200,k:140,o:90},up:{m:32,o:12}},
-bombardier:{n:'Bombardier stratégique',d:'air',rng:35,cost:{m:950,k:110,o:75},up:{m:26,o:10}},
-heli_attaque:{n:'Hélicoptère d\'attaque',d:'air',rng:20,cost:{m:520,k:70,o:40},up:{m:16,o:6}},
-heli_trans:{n:'Hélicoptère de transport',d:'air',rng:20,cost:{m:420,k:50,o:30},up:{m:12,o:5}},
-transport_aerien:{n:'Avion de transport',d:'air',rng:40,airlift:true,cost:{m:650,k:90,o:55},up:{m:18,o:8}},
-torpilleur:{n:'Torpilleur',d:'sea',atk:8,def:5,hp:12,rng:30,cost:{m:320,k:70,o:25},up:{m:10,o:3}},
-fregate_furtive:{n:'Frégate furtive',d:'sea',atk:15,def:13,hp:14,rng:36,stealth:true,cost:{m:900,k:120,o:55},up:{m:22,o:7}},
-destroyer:{n:'Destroyer',d:'sea',atk:14,def:12,hp:18,rng:30,cost:{m:650,k:100,o:45},up:{m:18,o:6}},
-sous_marin:{n:'Sous-marin',d:'sea',atk:17,def:8,hp:14,rng:30,stealth:true,cost:{m:700,k:90,o:50},up:{m:20,o:7}},
-croiseur:{n:'Croiseur',d:'sea',atk:20,def:18,hp:30,rng:24,cost:{m:1150,k:160,o:75},up:{m:28,o:9}},
-cuirasse:{n:'Cuirassé',d:'sea',atk:30,def:28,hp:50,rng:24,cost:{m:2000,k:260,o:120},up:{m:40,o:14}},
-porte_avions:{n:'Porte-avions',d:'sea',atk:4,def:10,hp:30,rng:30,capAir:2,cost:{m:1700,k:220,o:110},up:{m:36,o:12}},
-porte_helico:{n:'Porte-hélicoptères',d:'sea',atk:5,def:12,hp:28,rng:30,capHeli:3,cost:{m:1300,k:180,o:90},up:{m:30,o:10}},
-transport_naval:{n:'Transport naval',d:'sea',atk:2,def:8,hp:20,rng:24,inv:true,cost:{m:480,k:80,o:35},up:{m:12,o:4}},
+infanterie:{n:'Infanterie',d:'land',atk:4,def:8,hp:10,mp:3,dmB:2,dmM:6,cost:{m:120,k:10},up:{m:4}},
+inf_mot:{n:'Inf. motorisée',d:'land',atk:6,def:9,hp:12,mp:4,dmB:4,dmM:8,cost:{m:280,o:15},up:{m:8,o:2}},
+para:{n:'Parachutistes',d:'land',atk:5,def:6,hp:10,mp:3,air:true,dmB:2,dmM:7,cost:{m:240,o:10},up:{m:6}},
+genie:{n:'Génie',d:'land',atk:2,def:5,hp:10,mp:3,eng:true,dmB:12,dmM:4,cost:{m:220,k:20},up:{m:5}},
+char_leger:{n:'Chars légers',d:'land',atk:9,def:7,hp:14,mp:4,dmB:6,dmM:8,cost:{m:400,k:40,o:20},up:{m:12,o:3}},
+char_lourd:{n:'Chars lourds',d:'land',atk:14,def:16,hp:22,mp:3,dmB:10,dmM:10,cost:{m:800,k:90,o:45},up:{m:22,o:5}},
+art_tractee:{n:'Artillerie tractée',d:'land',atk:12,def:3,hp:9,mp:2,rng:3,dmB:12,dmM:9,cost:{m:360,k:50},up:{m:10,o:1}},
+autocanon:{n:'Auto-canon lourd',d:'land',atk:16,def:6,hp:12,mp:3,rng:2.5,dmB:16,dmM:12,cost:{m:640,k:80,o:25},up:{m:16,o:3}},
+aa_tractee:{n:'Antiaérien tracté',d:'land',atk:2,def:6,hp:10,mp:2,aa:12,rng:2,dmB:0,dmM:4,cost:{m:320,k:60},up:{m:8}},
+aa_chenillee:{n:'Antiaérien chenillé',d:'land',atk:4,def:9,hp:13,mp:3,aa:18,rng:2.2,dmB:2,dmM:5,cost:{m:560,k:95,o:20},up:{m:12,o:2}},
+chasseur_chars:{n:'Chasseur de chars',d:'land',atk:22,def:11,hp:15,mp:3,rng:1.5,dmB:6,dmM:8,cost:{m:680,k:90,o:30},up:{m:17,o:4}},
+chasseur:{n:'Chasseur',d:'air',rng:10,atk:6,def:4,hp:8,dmB:4,dmM:6,dse:4,cost:{m:450,k:60,o:35},up:{m:14,o:6}},
+rafale:{n:'Rafale',d:'air',rng:12,atk:10,def:6,hp:10,dmB:12,dmM:14,dse:8,cost:{m:1200,k:140,o:90},up:{m:32,o:12}},
+bombardier:{n:'Bombardier stratégique',d:'air',rng:10,atk:4,def:8,hp:12,dmB:22,dmM:26,dse:10,cost:{m:950,k:110,o:75},up:{m:26,o:10}},
+heli_attaque:{n:'Hélicoptère d\'attaque',d:'air',rng:4,atk:8,def:5,hp:9,dmB:8,dmM:10,dse:6,cost:{m:520,k:70,o:40},up:{m:16,o:6}},
+heli_trans:{n:'Hélicoptère de transport',d:'air',rng:4,atk:0,def:4,hp:8,dmB:0,dmM:0,dse:0,cost:{m:420,k:50,o:30},up:{m:12,o:5}},
+transport_aerien:{n:'Avion de transport',d:'air',rng:5,atk:0,def:6,hp:9,airlift:true,dmB:0,dmM:0,dse:0,cost:{m:650,k:90,o:55},up:{m:18,o:8}},
+torpilleur:{n:'Torpilleur',d:'sea',atk:8,def:5,hp:12,rng:2.2,dmB:6,dmM:6,dse:9,cost:{m:320,k:70,o:25},up:{m:10,o:3}},
+fregate_furtive:{n:'Frégate furtive',d:'sea',atk:15,def:13,hp:14,rng:3,stealth:true,dmB:12,dmM:10,dse:11,cost:{m:900,k:120,o:55},up:{m:22,o:7}},
+destroyer:{n:'Destroyer',d:'sea',atk:14,def:12,hp:18,rng:2.5,dmB:10,dmM:9,dse:13,cost:{m:650,k:100,o:45},up:{m:18,o:6}},
+sous_marin:{n:'Sous-marin',d:'sea',atk:17,def:8,hp:14,rng:2,stealth:true,dmB:4,dmM:4,dse:12,cost:{m:700,k:90,o:50},up:{m:20,o:7}},
+croiseur:{n:'Croiseur',d:'sea',atk:20,def:18,hp:30,rng:3.2,dmB:18,dmM:14,dse:16,cost:{m:1150,k:160,o:75},up:{m:28,o:9}},
+cuirasse:{n:'Cuirassé',d:'sea',atk:30,def:28,hp:50,rng:3.6,dmB:26,dmM:20,dse:18,cost:{m:2000,k:260,o:120},up:{m:40,o:14}},
+porte_avions:{n:'Porte-avions',d:'sea',atk:6,def:10,hp:30,rng:4.5,capAir:2,dmB:18,dmM:16,dse:10,cost:{m:1700,k:220,o:110},up:{m:36,o:12}},
+porte_helico:{n:'Porte-hélicoptères',d:'sea',atk:7,def:12,hp:28,rng:3.5,capHeli:3,dmB:12,dmM:12,dse:6,cost:{m:1300,k:180,o:90},up:{m:30,o:10}},
+transport_naval:{n:'Transport naval',d:'sea',atk:2,def:8,hp:20,rng:1.5,inv:true,dmB:0,dmM:0,dse:0,cost:{m:480,k:80,o:35},up:{m:12,o:4}},
 cargo:{n:'Cargo',d:'sea',atk:0,def:4,hp:14,rng:30,cargoBonus:2,cost:{m:300,k:50,o:20},up:{m:8,o:2}}
 };
-const LAND_HEAVY=['artillerie','art_lourde','lance_roquettes','aa'];
+const LAND_HEAVY=['art_tractee','autocanon','aa_tractee','aa_chenillee','chasseur_chars'];
 const CBUILDINGS={
 caserne:{n:'Caserne',m:400,k:80,t:2},
 usine_armement:{n:'Fonderie de munitions',m:750,k:160,t:3},
@@ -222,9 +224,9 @@ raffinerie:{n:'Raffinerie',m:550,k:80,t:2}
 };
 function reqOf(tid){const U=UNITS[tid];if(U.d==='air')return'base_aerienne';if(U.d==='sea')return'base_navale';if(tid==='char_leger'||tid==='char_lourd')return'usine_chars';return LAND_HEAVY.indexOf(tid)>=0?'usine_armement':'caserne';}
 for(const t in UNITS){const U=UNITS[t];if(U.cost.p===undefined)U.cost.p=U.d==='land'?Math.max(20,Math.round(U.cost.m/4)):U.d==='sea'?Math.round(U.cost.m/8):Math.round(U.cost.m/6);}
-const BRANCH={infanterie:'inf',inf_mot:'inf',para:'inf',genie:'inf',char_leger:'veh',char_lourd:'veh',artillerie:'ord',art_lourde:'ord',lance_roquettes:'ord',aa:'ord'};
+const BRANCH={infanterie:'inf',inf_mot:'inf',para:'inf',genie:'inf',char_leger:'veh',char_lourd:'veh',art_tractee:'ord',autocanon:'ord',aa_tractee:'ord',aa_chenillee:'ord',chasseur_chars:'ord'};
 const POWER_DEFS=[{country:'United States of America',color:'#e05a4a'},{country:'China',color:'#e0913a'},{country:'Russia',color:'#9a68c8'},{country:'India',color:'#3f9d6a'},{country:'Brazil',color:'#d3c14e'},{country:'United Kingdom',color:'#d27a8a'}];
-const CLOCK_SEC=30, VP_GOAL=120;
+const CLOCK_SEC=86400, VP_GOAL=120;
 const EMO={m:'$ ARGENT',k:'⚒ MÉTAUX',o:'🛢 PÉTROLE',f:'🌾 BLÉ',r:'💎 MÉT. RARES',p:'👥 MAIN-D\'ŒUVRE',g:'🏅 OR'};
 // ---------- géométrie ----------
 function pipRing(x,y,ring){let inside=false;for(let i=0,j=ring.length-2;i<ring.length;j=i,i+=2){const xi=ring[i],yi=ring[i+1],xj=ring[j],yj=ring[j+1];if(((yi>y)!==(yj>y))&&(x<(xj-xi)*(y-yi)/(yj-yi)+xi))inside=!inside;}return inside;}
@@ -234,7 +236,7 @@ function provBuild(ci,li){
   let area=0;for(const a of rr){area+=Math.abs(a[2]-a[0])*Math.abs(a[3]-a[1]);}
   // périmètre approx pour calculs
   let sx=0,sy=0,cnt=0;for(const a of rr){for(let i=0;i<a.length;i+=2){sx+=a[i];sy+=a[i+1];cnt++;}}
-  return {ci,li,n:d[0]||('Région '+(li+1)),bb,rings:rr,cx:d[2],cy:d[3],main:cnt?Math.round(area):0,first:!0,owner:ci,b:{},q:[],mil:0,cap:-1};
+  return {ci,li,n:d[0]||('Région '+(li+1)),bb,rings:rr,cx:d[2],cy:d[3],main:cnt?Math.round(area):0,first:!0,owner:ci,b:{},q:[],mil:0,moral:100,captured:0,cap:-1};
 }
 // ---------- état ----------
 let C=WD.countries, FR=WD.fr, PL=-1, turn=1, gameOver=false;
@@ -314,7 +316,7 @@ function setupWorld(playerCi){
     const f={id:i,name:nameOf(i),color:pd?pd.color:'hsl('+(i*57)%360+' 30% 45%)',isPlayer:i===playerCi,alive:true,money:0,mat:0,oil:0,food:0,rare:0,mp:0,gold:0,tax:15,eff:5,alk:0};
     factions.push(f);
     if(pd)MAJORS.push(i);
-    for(const p of provIdxByCi[i]){p.owner=i;p.b={};p.q=[];p.mil=p.cap>=0?9:3;p.captured=0;}
+    for(const p of provIdxByCi[i]){p.owner=i;p.b={};p.q=[];p.mil=p.cap>=0?9:3;p.captured=0;p.moral=100;}
   }
   const P=factions[PL];
   P.money=6000;P.mat=280+Math.sqrt(gdpOf(PL))*6;P.oil=200+oilOf(PL)*40;P.food=600;P.rare=200;P.mp=500;P.gold=50;
@@ -393,7 +395,193 @@ function armyName(fid,tid){return romanNum(armSeq)+ORDN+' — '+UNITS[tid].n;}
 function armyPower(a){let pw=0;for(const t in a.u){const U=UNITS[t];pw+=(U.atk||2)*a.u[t];}return pw;}
 function armyDef(a){let df=0;for(const t in a.u){const U=UNITS[t];df+=(U.def||2)*a.u[t];}return df;}
 function armyCount(a){let c=0;for(const t in a.u)c+=a.u[t];return c;}
-function armySpeed(a){let sp=8;for(const t in a.u){const U=UNITS[t];sp=Math.min(sp,U.d==='air'?22:U.d==='sea'?5:(t==='inf_mot'||t==='char_leger'||t==='char_lourd')?9:6);}return sp;}
+const SPD={infanterie:0.55,inf_mot:0.95,para:0.6,genie:0.5,char_leger:1.25,char_lourd:0.95,art_tractee:0.4,autocanon:1.0,aa_tractee:0.5,aa_chenillee:1.0,chasseur_chars:1.15,chasseur:8,rafale:9,bombardier:7,heli_attaque:5,heli_trans:5,transport_aerien:7,torpilleur:1.5,fregate_furtive:1.6,destroyer:1.45,sous_marin:1.2,croiseur:1.3,cuirasse:1.2,porte_avions:1.15,porte_helico:1.05,transport_naval:1.0,cargo:0.9};
+function armySpeed(a){let sp=999;for(const t in a.u){if(SPD[t]!=null&&SPD[t]<sp)sp=SPD[t];}return sp===999?0.55:sp;}
+
+// ---------- COMBAT : dégâts par cible, portée, bombards, moral ----------
+function domOfArmy(a){let air=false,sea=false,land=false;for(const t in a.u){const U=UNITS[t];if(!U)continue;if(U.d==='air')air=true;else if(U.d==='sea')sea=true;else land=true;}return air?'air':(sea&&!land?'sea':'land');}
+function dmgVs(U,dom){if(dom==='air')return U.aa||Math.round((U.atk||0)*0.25);if(dom==='sea')return U.dse||0;return U.atk||0;}
+function armyDmgAgainst(a,dom,which){let s=0;for(const t in a.u){const U=UNITS[t];if(!U)continue;if(which==='B')s+=(U.dmB||0)*a.u[t];else if(which==='M')s+=(U.dmM||0)*a.u[t];else s+=dmgVs(U,dom)*a.u[t];}return s;}
+function armyRange(a){let r=0;for(const t in a.u){const U=UNITS[t];if(U&&U.rng&&U.rng>r)r=U.rng;}return r;}
+function killArmy(a,why){if(a.dead)return;a.dead=true;a.order=null;a.hold=false;a.heal=false;
+  if(a.fid===PL)journal('battle','💀 '+a.tag+' est détruite !'+(why?' ('+why+')':''));}
+function receiveFire(def,dmg,atk){
+  def.hp=Math.max(0,def.hp-dmg*1.2);
+  if((def.fid===PL)||(atk&&atk.fid===PL))mapDirty=true;
+  if(def.hp<=0&&!def.dead){killArmy(def,'tir à distance');if(atk&&atk.fid!==PL)journal('battle','⚔️ '+def.tag+' détruite par '+atk.tag);}
+  else{
+    // FEU DE REPRÉSAILLES / DÉFENSIF : riposte automatique
+    const rip=def.cmode==='rep'?1:(def.cmode==='def'?0.55:0);
+    if(rip>0&&atk&&!atk.dead){const back=armyDmgAgainst(def,domOfArmy(atk))*rip*resMult(def.fid);
+      if(back>0){atk.hp=Math.max(0,atk.hp-back*1.2);
+        if(atk.hp<=0&&!atk.dead){killArmy(atk);if(def.fid===PL)journal('battle','🔥 FEU DE REPRÉSAILLES : '+atk.tag+' détruite par '+def.tag+' !');}
+      }}
+  }
+}
+function bombardArmy(atk,def){
+  const dmg=armyDmgAgainst(atk,domOfArmy(def))*resMult(atk.fid);
+  if(dmg<=0)return;
+  receiveFire(def,dmg,atk);
+  if(atk.fid===PL)journal('battle','🎯 '+atk.tag+' bombarde '+def.tag+' (-'+Math.round(dmg)+')');
+}
+function bombardRegion(atk,p){
+  const dmgB=armyDmgAgainst(atk,null,'B'),dmgM=armyDmgAgainst(atk,null,'M');
+  let detruits=0;
+  if(dmgB>0&&p.b)for(const k in p.b){if(p.b[k]>0&&Math.random()*100<dmgB){p.b[k]--;detruits++;if(p.b[k]<=0)delete p.b[k];}}
+  p.moral=Math.max(0,(p.moral==null?100:p.moral)-dmgM);
+  if(p.moral==null)p.moral=100;
+  mapDirty=true;
+  if(p.owner===PL||atk.fid===PL){
+    if(atk.fid===PL&&dmgM>0)journal('war','💥 '+atk.tag+' pilonne '+provName(p)+' : moral -'+Math.round(dmgM)+(detruits?' · '+detruits+' bâtiment(s) détruit(s)':''));
+    if(p.owner===PL&&dmgM>0)toast('💥 '+provName(p)+' est bombardée : moral '+Math.round(p.moral)+'/100');
+  }
+}
+// ---------- MINI-CAPITALE RÉGIONALE : capture en passant dessus (en guerre) ----------
+function checkMiniCap(a){
+  const p=PROVS[a.prov];if(!p)return;
+  if(p.owner>=0?p.owner===a.fid:!(p.owner<0))if(p.owner===a.fid)return;
+  if(p.owner>=0&&!atWar(a.fid,p.owner))return;
+  const R=0.28;
+  if(Math.hypot(a.pos[0]-p.cx,a.pos[1]-p.cy)<=R){takeRegion(a,p);return;}
+  if(p.city)for(const c of p.city){if(Math.hypot(a.pos[0]-c.x,a.pos[1]-c.y)<=R){takeRegion(a,p);return;}}
+}
+function takeRegion(a,p){
+  const old=p.owner;
+  p.owner=a.fid;p.captured=0;p.q=[];
+  p.mil=Math.max(0,Math.round(p.mil*0.3));
+  p.moral=Math.max(40,p.moral==null?100:p.moral);
+  mapDirty=true;
+  if(a.fid===PL){journal('war',(p.cap?'🏛️ CAPITALE prise : ':'🏴 Région prise : ')+provName(p));if(p.cap)toast('🏛️ '+(p.city&&p.city[0]?p.city[0].name:p.n)+' est à nous ! (+2 VP)');}
+  else if(old===PL){journal('war','🚨 '+nameOf(a.fid)+' prend '+provName(p)+' !');toast('🚨 '+provName(p)+' est prise par '+nameOf(a.fid)+' !');}
+  checkCountry(p.ci,old,a.fid);
+}
+// ---------- ATTAQUER : troupes ou régions, tir depuis la portée maximale ----------
+function attackExecute(a,tgtA,p){
+  if(a.dead)return false;
+  const rng=armyRange(a);
+  const tx=tgtA?tgtA.pos[0]:(p?p.cx:0),ty=tgtA?tgtA.pos[1]:(p?p.cy:0);
+  const d=Math.hypot(tx-a.pos[0],ty-a.pos[1]);
+  if(d<=rng+0.05){
+    if(tgtA)bombardArmy(a,tgtA);else if(p)bombardRegion(a,p);
+    return true; // tir effectué : pas besoin d'avancer
+  }
+  // hors de portée : s'approche jusqu'à la portée maximale puis tire
+  const k=d>0?(d-rng)/d:0;
+  const wx=a.pos[0]+(tx-a.pos[0])*k,wy=a.pos[1]+(ty-a.pos[1])*k;
+  a.order={x:Math.round(wx*100)/100,y:Math.round(wy*100)/100,tgt:p?p.pg:null,bomb:tgtA?{army:tgtA.id}:{pg:p.pg}};
+  return false;
+}
+function attackOrder(ids,wx,wy,hitId){
+  let done=0;
+  const hit=hitId>=0?armies.find(q=>q.id===hitId&&!q.dead):null;
+  const tgtA=(hit&&hit.fid!==PL)?hit:null;
+  const p=tgtA?null:provAt(wx,wy);
+  if(!tgtA&&!p)return 0;
+  if(p&&!tgtA&&p.owner>=0&&p.owner!==PL&&!atWar(PL,p.owner))declareWar(PL,p.owner);
+  for(const id of [].concat(ids)){
+    const a=armies.find(q=>q.id===id&&!q.dead);if(!a)continue;
+    if(tgtA&&tgtA.fid===a.fid)continue;
+    if(tgtA&&a.fid===PL&&!atWar(a.fid,tgtA.fid))continue;
+    if(attackExecute(a,tgtA,p))done++;
+  }
+  mapDirty=true;
+  return done;
+}
+function healOrder(ids){ // SOIGNER : stationne et récupère des PV sur territoire ami
+  for(const id of [].concat(ids)){
+    const a=armies.find(q=>q.id===id&&!q.dead);if(!a)continue;
+    a.order=null;a.hold=true;a.heal=true;
+  }
+  mapDirty=true;renderArmyBar&&selected.length&&renderArmyBar();
+}
+function applyCombatMode(ids,mode){ // 'def' défensif | 'off' offensif | 'rep' feu de représailles
+  for(const id of [].concat(ids)){
+    const a=armies.find(q=>q.id===id&&!q.dead);if(!a)continue;
+    a.cmode=mode;
+  }
+  const lbl={def:'🛡️ DÉFENSIF — combat le premier non-allié qui entre dans sa zone',off:"⚔️ OFFENSIF — avance vers l'ennemi",rep:'🔥 FEU DE REPRÉSAILLES — riposte à 100 % si bombardé'};
+  if(factions[PL]&&factions[PL].isPlayer!==false)toast(lbl[mode]||'Mode modifié');
+  mapDirty=true;
+}
+function toggleHold(ids){ // ⏳ retarder / tenir en place
+  for(const id of [].concat(ids)){
+    const a=armies.find(q=>q.id===id&&!q.dead);if(!a)continue;
+    a.hold=!a.hold;if(a.hold)a.order=null;
+  }
+  mapDirty=true;
+}
+// ---------- RESOLUTION DU TIR APRES APPROCHE, défense auto, offensive auto ----------
+function resolveBomb(a,bomb){
+  if(a.dead)return;
+  const ta=bomb.army!=null?armies.find(q=>q.id===bomb.army&&!q.dead):null;
+  const tp=bomb.army==null?PROVS[bomb.pg]:null;
+  if(ta&&atWar(a.fid,ta.fid))attackExecute(a,ta,null);
+  else if(tp&&tp.pg!=null)attackExecute(a,null,tp);
+}
+function defensifTick(){
+  for(const a of armies){
+    if(a.dead||a.hold&&0)continue;
+    if(!a.order&&!a.dead&&(a.cmode==='def'||a.cmode==='off')){
+      const rng=Math.max(armyRange(a),0.35);
+      let best=null,bd=1e9;
+      for(const e of armies){
+        if(e.dead||e.fid===a.fid||!atWar(a.fid,e.fid))continue;
+        const d=Math.hypot(e.pos[0]-a.pos[0],e.pos[1]-a.pos[1]);
+        if(d<=rng&&d<bd){bd=d;best=e;}
+      }
+      if(best)bombardArmy(a,best);
+    }
+  }
+}
+function offensifTick(){
+  for(const a of armies){
+    if(a.dead||a.order||a.hold||a.cmode!=='off')continue;
+    let best=null,bd=1e9;
+    for(const p of PROVS){
+      if(p.owner<0||!atWar(a.fid,p.owner))continue;
+      const d=Math.hypot(p.cx-a.pos[0],p.cy-a.pos[1]);
+      if(d<bd){bd=d;best=p;}
+    }
+    if(best&&bd>armyRange(a))attackExecute(a,null,best);
+  }
+}
+// ---------- MORAL : régénération + RÉVOLTE ----------
+function moralTurn(){
+  for(const p of PROVS){
+    if(p.moral==null)p.moral=100;
+    if(p.owner===p.ci){if(p.moral<100)p.moral=Math.min(100,p.moral+2*((p.b&&p.b.forteresse)?2:1));}
+    else if(p.owner>=0&&p.moral<=20&&Math.random()<0.35)revolt(p);
+  }
+}
+function revolt(p){
+  const adj=(WD.adj&&WD.adj[p.ci])||[];
+  let best=-1,bw=-1;
+  for(const j of adj){
+    const ci=+j;if(ci===p.ci||ci===p.owner)continue;
+    const f=factions[ci];if(!f||!f.alive)continue;
+    const w=gdpOf(ci)+provIdxByCi[ci].filter(q=>q.owner===ci).length*2;
+    if(w>bw){bw=w;best=ci;}
+  }
+  const old=p.owner;
+  p.owner=best>=0?best:-1;p.moral=70;p.mil=2;p.captured=0;p.q=[];
+  const who=best>=0?nameOf(best):'la rébellion';
+  journal('war','🔥 RÉVOLTE : '+provName(p)+' échappe à '+nameOf(old)+' → '+who+' !');
+  if(old===PL)toast('🔥 '+provName(p)+' SE RÉVOLTE ! Elle te échappe.');
+  if(best>=0)toast('🔥 '+provName(p)+' rejoint '+nameOf(best)+' (révolte)!');
+  mapDirty=true;bgDirty=true;
+  checkCountry(p.ci,old,best>=0?best:-1);
+}
+// soigner au fil des jours : PV +25/jour si au repos sur territoire ami
+function healTurn(){
+  for(const a of armies){
+    if(a.dead||a.order||!healCheck(a))continue;
+    if(a.hp<100){a.hp=Math.min(100,a.hp+25);mapDirty=true;if(a.fid===PL&&a.hp>=100){a.heal=false;}}
+  }
+}
+function healCheck(a){
+  const p=PROVS[a.prov];
+  return !!a.heal&&!!p&&(p.owner===a.fid)|| !!a.heal&&!!p&&(relOf(a.fid,p.owner)==='ally');
+}
 function spawnArmy(fid,prov,u){
   const f=factions[fid];if(!f||!f.alive)return null;
   const first=Object.keys(u)[0];
@@ -433,21 +621,28 @@ function setOrder(ids,x,y){
   }
   orderTarget=null;
 }
-function moveArmies(dt){ // dt = degrés-par-seconde*vitesse
+function moveArmies(dt){ // dt = fraction de jour (temps réel : 1 jour = 24 h)
+  let moving=false;
   for(const a of armies){
-    if(a.dead||!a.order)continue;
+    if(a.dead)continue;
+    if(a.hold)continue; // ⏳ en attente
+    if(!a.order)continue;
+    const bomb=a.order.bomb;
     const sp=armySpeed(a)*dt;
     const dx=a.order.x-a.pos[0],dy=a.order.y-a.pos[1];
     const d=Math.hypot(dx,dy);
     if(d<=sp){
       a.pos=[a.order.x,a.order.y];
       const tgt=a.order.tgt!=null?PROVS[a.order.tgt]:provAt(a.order.x,a.order.y);
-      a.order=null;
+      a.order=null;moving=true;
       if(tgt&&tgt.pg!==a.prov){a.prov=tgt.pg;arriveArmy(a,tgt);}
+      if(bomb&&!a.dead)resolveBomb(a,bomb);
     }else{
-      a.pos[0]+=dx/d*sp;a.pos[1]+=dy/d*sp;
+      a.pos[0]+=dx/d*sp;a.pos[1]+=dy/d*sp;moving=true;
     }
+    if(!a.dead&&domOfArmy(a)==='land')checkMiniCap(a); // capture par mini-capitale / villes
   }
+  if(moving)mapDirty=true;
 }
 function arriveArmy(a,p){
   const f=factions[a.fid];
@@ -455,7 +650,7 @@ function arriveArmy(a,p){
   const def=armiesIn(p.owner,p).filter(x=>x.fid!==a.fid);
   if(atWar(a.fid,p.owner)||p.owner<0){
     if(def.length){battleAt(a,p,def);}
-    else{captureProgress(a,p);}
+    else if(domOfArmy(a)==='land'){takeRegion(a,p);} // troupe terrestre : la région est à nous
   }
 }
 function battleAt(atk,p,defs){
@@ -494,10 +689,11 @@ function captureProgress(a,p){
 }
 function checkCapt(p){p.captured=p.captured||0;}
 function checkCountry(ci,oldOwner,byFid){
+  // un pays tombe si l'ensemble de SES regions est perdue (incl. regions occupees par lui : elles n'appartiennent pas a son ci)
   const provs=provIdxByCi[ci];
-  const fell=provs.every(p=>p.owner!==oldOwner);
+  const fell=provs.every(p=>p.owner!==ci);
   if(fell){
-    const f=factions[oldOwner];
+    const f=factions[ci];
     if(f&&f.alive){
       f.alive=false;
       const isMaj=MAJORS.indexOf(oldOwner)>=0;
@@ -564,11 +760,15 @@ function endTurn(){
   for(const a of armies){
     if(a.dead)continue;
     const p=PROVS[a.prov];
-    if(p&&p.owner!==a.fid&&(atWar(a.fid,p.owner)||p.owner<0)&&!armiesIn(p.owner,p).length){
-      captureProgress(a,p);
+    if(p&&p.owner!==a.fid&&(atWar(a.fid,p.owner)||p.owner<0)&&!armiesIn(p.owner,p).length&&domOfArmy(a)==='land'){
+      takeRegion(a,p);
     }
   }
+  moralTurn();
+  healTurn();
   aiTurn();
+  defensifTick();
+  offensifTick();
   cleanupArmies();
   turn++;
   gameClock.left=CLOCK_SEC;
@@ -985,18 +1185,15 @@ function renderResBar(){
   document.getElementById('victfill').style.width=Math.min(100,vp/VP_GOAL*100)+'%';
   if(vp>=VP_GOAL&&!gameOver)gameEnd(true);
 }
+function fmtHMS(s){s=Math.max(0,Math.ceil(s));const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),c=Math.floor(s%60);return (h<10?'0':'')+h+':'+(m<10?'0':'')+m+':'+(c<10?'0':'')+c;}
 function renderClock(){
   const t=document.getElementById('turnlab');
   if(!t)return;
-  t.textContent=gameClock.paused?'JOUR '+turn+' · ⏸':'JOUR '+turn+' · ⏱ '+Math.max(0,Math.ceil(gameClock.left))+'s';
+  t.textContent=gameClock.paused?'JOUR '+turn+' · ⏸ PAUSE':'JOUR '+turn+' · '+fmtHMS(gameClock.left);
 }
 function updSpeedUI(){
-  const b1=document.getElementById('pausebtn'),s1=document.getElementById('spd1'),s2=document.getElementById('spd2'),s3=document.getElementById('spd3');
-  if(!s1)return;
-  b1.textContent=gameClock.paused?'▶':'⏸';
-  s1.classList.toggle('on',!gameClock.paused&&gameClock.speed===1);
-  s2.classList.toggle('on',!gameClock.paused&&gameClock.speed===2);
-  s3.classList.toggle('on',!gameClock.paused&&gameClock.speed===3);
+  const b1=document.getElementById('pausebtn');
+  if(b1)b1.textContent=gameClock.paused?'▶':'⏸';
 }
 function toast(txt){
   const t=document.getElementById('toasts');if(!t)return;
@@ -1100,19 +1297,22 @@ const TICN='<circle cx="12" cy="12" r="8.2" fill="none" stroke="'+GREY+'" stroke
 const LCN='<path d="M7.4 10.4V8a4.6 4.6 0 019.2 0v2.4h1.6v10.4H5.8V10.4h1.6zm2.1 0h5V8a2.5 2.5 0 00-5 0v2.4z" fill="#7b8b9a"/>';
 function svgCost(c){let h='';for(const k of ['m','k','o','f','r','p'])if(c[k])h+='<span class="ci">'+svgI(RSVG[k])+'<b>'+c[k]+'</b></span>';return h;}
 // ---------- secteurs en onglets (INFRASTRUCTURES / INFANTERIE / BLINDÉS / AÉRONAUTIQUE / NAVAL) ----------
-const SECTORS={build:'INFRASTRUCTURES',inf:'INFANTERIE',arm:'BLINDÉS',air:'AÉRONAUTIQUE',nav:'NAVAL'};
+const SECTORS={build:'INFRASTRUCTURES',inf:'INFANTERIE',arm:'BLINDÉS',air:'AÉRONAUTIQUE',nav:'NAVAL',art:'ARTILLERIE'};
 const SEC_UNITS={
   inf:['infanterie','inf_mot','para','genie'],
-  arm:['char_leger','char_lourd','artillerie','art_lourde','lance_roquettes','aa'],
+  arm:['char_leger','char_lourd'],
+  art:['art_tractee','autocanon','aa_tractee','aa_chenillee','chasseur_chars'],
   air:['chasseur','rafale','bombardier','heli_attaque','heli_trans','transport_aerien'],
   nav:['torpilleur','fregate_furtive','destroyer','sous_marin','croiseur','cuirasse','porte_avions','porte_helico','transport_naval','cargo']
 };
 let ptab='build';
 // ---------- VRAIES photos des unités (Wikipédia, chargées en ligne ; SVG dessiné en secours) ----------
-const PHOTO={infanterie:'Infantry',inf_mot:'Motorized infantry',para:'Paratrooper',genie:'Combat engineer',char_leger:'M551 Sheridan',char_lourd:'Leopard 2',artillerie:'Howitzer',art_lourde:'PzH 2000',lance_roquettes:'M142 HIMARS',aa:'2K12 Kub',chasseur:'Dassault Rafale',rafale:'Dassault Rafale',bombardier:'B-2 Spirit',heli_attaque:'Boeing AH-64 Apache',heli_trans:'Boeing CH-47 Chinook',transport_aerien:'Lockheed C-130 Hercules',torpilleur:'Missile boat',fregate_furtive:'La Fayette-class frigate',destroyer:'Arleigh Burke-class destroyer',sous_marin:'Virginia-class submarine',croiseur:'Ticonderoga-class cruiser',cuirasse:'Iowa-class battleship',porte_avions:'Nimitz-class aircraft carrier',porte_helico:'USS Wasp (LHD-1)',transport_naval:'San Antonio-class amphibious transport dock',cargo:'Container ship'};
+const PHOTO={infanterie:'Infantry',inf_mot:'Motorized infantry',para:'Paratrooper',genie:'Combat engineer',char_leger:'M551 Sheridan',char_lourd:'Leopard 2',art_tractee:'M198 howitzer',autocanon:'Sd.Kfz. 124 Wespe',aa_tractee:'2K12 Kub',aa_chenillee:'Flakpanzer Gepard',chasseur_chars:'Jagdpanther',chasseur:'Dassault Rafale',rafale:'Dassault Rafale',bombardier:'B-2 Spirit',heli_attaque:'Boeing AH-64 Apache',heli_trans:'Boeing CH-47 Chinook',transport_aerien:'Lockheed C-130 Hercules',torpilleur:'Missile boat',fregate_furtive:'La Fayette-class frigate',destroyer:'Arleigh Burke-class destroyer',sous_marin:'Virginia-class submarine',croiseur:'Ticonderoga-class cruiser',cuirasse:'Iowa-class battleship',porte_avions:'Nimitz-class aircraft carrier',porte_helico:'USS Wasp (LHD-1)',transport_naval:'San Antonio-class amphibious transport dock',cargo:'Container ship'};
+const BPHOTO={caserne:'Barracks',usine_armement:'Arms industry',usine_chars:'Tank',recrute:'Military recruitment',base_aerienne:'Air base',base_navale:'Naval base',forteresse:'Fortification',autoroute:'Controlled-access highway',rail:'Rail transport',usine:'Factory',raffinerie:'Petroleum industry'};
+const ORDIMG={'o_atk':'Artillery battery','o_mov':'Convoy','o_heal':'Combat medic'};
 const photoCache={};
 function photoIcon(tid,svg){
-  const t=PHOTO[tid];if(!t)return svg;
+  const t=PHOTO[tid]||BPHOTO[tid]||ORDIMG[tid];if(!t)return svg;
   const u=photoCache[t];
   if(u)return '<img class="imgp" src="'+u+'" onerror="this.outerHTML=\''+svg.replace(/"/g,'&quot;')+'\'">';
   if(window.__LIVE__&&typeof fetch==='function'){
@@ -1132,6 +1332,37 @@ function cardHTML(icon,name,lvl,cost,tm,btn){
 }
 function lockBtn(req){return '<div class="blockb">'+svgI(LCN)+'<span>'+req+'</span></div>';}
 
+let armyMenu=false;
+function renderArmyBar(){
+  const bar=document.getElementById('provbar');
+  if(!bar)return;
+  const sel=selected.map(id=>armies.find(a=>a.id===id&&!a.dead)).filter(a=>a&&a.fid===PL);
+  if(!sel.length){bar.style.display='none';return;}
+  bar.style.display='block';
+  const tc={};for(const a of sel)for(const t in a.u)tc[t]=(tc[t]||0)+a.u[t];
+  let dom=null,dn=0;for(const t in tc)if(tc[t]>dn){dom=t;dn=tc[t];}
+  const U=UNITS[dom]||{};
+  let hpT=0,nT=0;for(const t in tc){const TU=UNITS[t];if(!TU)continue;hpT+=(TU.hp||0)*tc[t];nT+=tc[t];}
+  let h='<h3>'+(sel.length>1?sel.length+' ARMÉES SÉLECTIONNÉES':'ARMÉE — '+(U.n||''))+'</h3>';
+  h+='<div style="display:flex;gap:10px;align-items:center;margin:6px 0">'+photoIcon(dom,svgI(USVG[dom]||''))
+   +'<div><div style="font-weight:bold">'+(U.n||'')+'</div><div class="nk">'+nT+' unités · '+hpT+' PV de bloc · vitesse '+(SPD[dom]!=null?SPD[dom]:'?')+'°/jour · portée '+(U.rng||0)+'°</div></div></div>';
+  h+='<div class="pvsec"><h4>UNITÉS</h4>';
+  for(const t in tc){const TU=UNITS[t];if(!TU)continue;
+    h+='<div class="brow"><span>'+tc[t]+'× '+TU.n+'</span><b>⚔ '+(TU.atk||0)+' · AA '+(TU.aa||0)+' · NAV '+(TU.dse||0)+' · ❤ '+(TU.hp||0)+(TU.rng?' · 🎯 '+TU.rng+'°':'')+'</b></div>';
+  }
+  h+='</div>';
+  const ob=(k,img,lbl)=>'<button class="btn" style="flex:1;padding:6px 2px;font-size:10px" data-ao="'+k+'">'+(img?photoIcon(img,''):'')+lbl+'</button>';
+  h+='<div style="display:flex;gap:4px;margin:8px 0">'+ob('atk','o_atk','ATTAQUER')+ob('move','o_mov','DÉPLACER')+ob('heal','o_heal','SOIGNER')+ob('menu','','☰ MODE')+'</div>';
+  if(armyMenu){
+    h+='<div class="pvsec"><h4>MODE DE COMBAT</h4>';
+    h+='<button class="btn" style="width:100%;margin:3px 0;font-size:11px" data-amode="def">🛡️ DÉFENSIF — tire sur le premier non-allié qui entre dans sa zone, riposte à 55 %</button>';
+    h+='<button class="btn" style="width:100%;margin:3px 0;font-size:11px" data-amode="off">⚔️ OFFENSIF — avance toute seule vers la région ennemie la plus proche</button>';
+    h+='<button class="btn" style="width:100%;margin:3px 0;font-size:11px" data-amode="rep">🔥 FEU DE REPRÉSAILLES — riposte à 100 % dès qu’elle est bombardée</button>';
+    h+='<button class="btn" style="width:100%;margin:3px 0;font-size:11px" data-ahold="1">⏳ EN ATTENTE — reste immobile (retarder)</button>';
+    h+='</div>';
+  }
+  bar.innerHTML=h;
+}
 let provSel=-1;
 function showProv(pg){
   provSel=pg;pan.open=true;
@@ -1145,6 +1376,10 @@ function renderProvBar(){
   const mine=p.owner===PL;
   const f=factions[p.owner];
   let h='<h3>'+(p.city&&p.city[0]?p.city[0].name:p.n)+' · '+C[p.ci].n+'</h3>';
+  if(p.moral!=null&&(p.moral<100||p.owner!==p.ci)){
+    const mk=Math.round(p.moral),mc=mk<=20?'#e06050':'#d8b45a';
+    h+='<div class="pvsec"><div class="brow"><span style="color:'+mc+'">MORAL '+mk+'/100'+(mk<=20?' · RISQUE DE RÉVOLTE !':'')+'</span></div><div class="progtr"><div class="progfd" style="width:'+mk+'%;background:'+mc+'"></div></div>'+(p.owner!==p.ci?'<div class="nk">Région occupée — sous 20 points, un voisin influent peut la réclamer par révolte.</div>':'')+'</div>';
+  }
   if(p.captured&&p.captured>0)h+='<div class="pvsec"><h4>OCCUPATION</h4><div class="brow"><span>Contrôle</span><b>'+Math.round(p.captured)+'%</b></div><div class="progtr"><div class="progfd" style="width:'+Math.min(100,p.captured)+'%"></div></div></div>';
   if(!mine&&factions[p.owner]&&factions[p.owner].alive&&!gameOver){
     const st=relOf(PL,p.owner);
@@ -1160,6 +1395,16 @@ function renderProvBar(){
     let tabs='<div class="ptabs">';
     for(const s in SECTORS)tabs+='<span class="ptab'+(ptab===s?' on':'')+'" data-ptab="'+s+'">'+SECTORS[s]+'</span>';
     tabs+='</div>';
+    if(p.q&&p.q.length){
+      h+='<div class="pvsec"><h4>EN PRODUCTION</h4>';
+      for(const it of p.q){
+        const key=it.u||it.b;
+        const ic=key?(it.u?photoIcon(it.u,svgI(USVG[it.u]||'')):photoIcon(it.b,svgI(BSVG[it.b]||''))):'';
+        const nm=key?(it.u?(UNITS[it.u]?UNITS[it.u].n:it.u):(CBUILDINGS[it.b]?CBUILDINGS[it.b].n:it.b)):'?';
+        h+='<div class="brow"><span style="display:flex;align-items:center;gap:6px">'+ic+'<span>'+nm+'</span></span><b class="cmin">'+Math.ceil(it.left)+' j restant</b></div>';
+      }
+      h+='</div>';
+    }
     h+=tabs;
     if(ptab==='build'){
       h+='<div class="pvsec"><h4>CONSTRUCTION</h4>';
@@ -1169,7 +1414,7 @@ function renderProvBar(){
         const c={m:B.m,k:B.k};
         const ok=affordOk(factions[PL],c);
         const btn='<button class="bbuild" data-bld="'+b+'" data-pg="'+p.pg+'"'+(ok?'':' disabled')+'>'+(ok?'CONSTRUIRE':'RESSOURCES')+'</button>';
-        h+=cardHTML(svgI(BSVG[b]||''),B.n,'LVL '+lvl,svgCost(c),B.t+' j',btn);
+        h+=cardHTML(photoIcon(b,svgI(BSVG[b]||'')),B.n,'LVL '+lvl,svgCost(c),B.t+' j',btn);
       }
       h+='</div>';
     }else{
@@ -1373,6 +1618,7 @@ function bindMap(){
         const hits=armies.filter(a=>a.fid===PL&&!a.dead&&a.pos[0]>=wx0&&a.pos[0]<=wx1&&a.pos[1]>=wy0&&a.pos[1]<=wy1);
         if(e.shiftKey){for(const a of hits)if(selected.indexOf(a.id)<0)selected.push(a.id);}
         else if(hits.length)selected=hits.map(a=>a.id);
+        if(!e.shiftKey||selected.length)renderArmyBar();
       }else if(!mouse.moved){
         tapAt(e.clientX,e.clientY,e.shiftKey);
       }
@@ -1428,9 +1674,19 @@ function bindMap(){
   },{passive:false});
 }
 function tapAt(x,y,shiftK){
+  if(orderTarget==='atk'){
+    const tg2=hitArmy(x,y);
+    const ids2=selected.slice();
+    orderTarget=null;
+    attackOrder(ids2,unprojX(x),unprojY(y),(tg2&&tg2.fid!==PL)?tg2.id:-1);
+    mapDirty=true;
+    if(selected.length)renderArmyBar();
+    return;
+  }
   const hit=hitArmy(x,y);
   if(hit&&hit.fid===PL){
     if(shiftK){if(selected.indexOf(hit.id)<0)selected.push(hit.id);}else selected=[hit.id];
+    renderArmyBar();
     mapDirty=true;
     toast('🎖️ '+hit.tag+' sélectionnée');
   }else if(hit&&hit.fid!==PL&&!gameOver){
@@ -1494,7 +1750,17 @@ function bindUI(){
   const bar=document.getElementById('provbar');
   bar.addEventListener('click',e=>{
     const t=e.target;
-    const pt=t.getAttribute&&t.getAttribute('data-ptab');
+    const up=k=>{let n=t;while(n&&n.getAttribute){const v=n.getAttribute('data-'+k);if(v!=null)return v;n=n.parentNode;}return null;};
+    const ao=up('ao');
+    if(ao==='atk'){if(!gameOver&&selected.length){orderTarget='atk';toast("🎯 Clique sur l'armée ennemie ou la région ennemie — le tir part de la portée maximale !");}return;}
+    if(ao==='move'){toast("🗺️ Clique sur la carte : tes armées y marchent au rythme de leur vitesse.");return;}
+    if(ao==='heal'){healOrder(selected);renderArmyBar();return;}
+    if(ao==='menu'){armyMenu=!armyMenu;renderArmyBar();return;}
+    const am=up('amode');
+    if(am){applyCombatMode(selected,am);armyMenu=false;renderArmyBar();return;}
+    const ah=up('ahold');
+    if(ah){toggleHold(selected);renderArmyBar();return;}
+    const pt=up('ptab');
     if(pt){ptab=pt;renderProvBar();return;}
     const pg=t.getAttribute&&t.getAttribute('data-pg');
     if(!pg)return;
@@ -1510,9 +1776,6 @@ function bindUI(){
   byId('m_coal').onclick=()=>renderCoalWin();
   // jour
   byId('pausebtn').onclick=()=>{gameClock.paused=!gameClock.paused;updSpeedUI();renderClock();};
-  byId('spd1').onclick=()=>{gameClock.speed=1;gameClock.paused=false;updSpeedUI();renderClock();};
-  byId('spd2').onclick=()=>{gameClock.speed=2;gameClock.paused=false;updSpeedUI();renderClock();};
-  byId('spd3').onclick=()=>{gameClock.speed=3;gameClock.paused=false;updSpeedUI();renderClock();};
   byId('endbtn').onclick=()=>{if(!gameOver)endTurn();};
   // menus overlays
   byId('searchinput').addEventListener('input',renderStartList);
@@ -1695,6 +1958,22 @@ function netHostCmd(cid,c){
       case 'tax':impots(Math.max(0,Math.min(60,+c.v||0)));break;
       case 'eff':douanes(Math.max(0,Math.min(100,+c.v||0)));break;
       case 'spy':_dealSpy(+c.tg);break;
+      case 'atk':{
+        const qa=(c.ids||[]).map(Number).filter(id=>{const a=armies.find(q=>q.id===id);return a&&!a.dead&&a.fid===cid;});
+        if(qa.length)_attackOrder(qa,+c.x,+c.y,c.tg==null?-1:+c.tg);
+        break;}
+      case 'amode':{
+        const qb=(c.ids||[]).map(Number).filter(id=>{const a=armies.find(q=>q.id===id);return a&&!a.dead&&a.fid===cid;});
+        if(qb.length)_applyCombatMode(qb,(c.m+'').slice(0,5));
+        break;}
+      case 'heal':{
+        const qc=(c.ids||[]).map(Number).filter(id=>{const a=armies.find(q=>q.id===id);return a&&!a.dead&&a.fid===cid;});
+        if(qc.length)_healOrder(qc);
+        break;}
+      case 'hold':{
+        const qd=(c.ids||[]).map(Number).filter(id=>{const a=armies.find(q=>q.id===id);return a&&!a.dead&&a.fid===cid;});
+        if(qd.length)_toggleHold(qd);
+        break;}
       default:return false;
     }
     return true;
@@ -1727,8 +2006,8 @@ function netSnap(){
     mkt:{oil:mkt.oil,mat:mkt.mat,food:mkt.food,rare:mkt.rare},
     f:factions.map(f=>({i:f.id,mo:Math.round(f.money),mt:Math.round(f.mat),oi:Math.round(f.oil),fo:Math.round(f.food),ra:Math.round(f.rare),mp:Math.round(f.mp),gd:Math.round(f.gold),al:f.alive?1:0})),
     rels:Array.from(relAn.entries()),
-    p:PROVS.map(p=>[p.owner,p.mil,Math.round(p.captured*100)/100,p.b,p.q]),
-    a:armies.map(a=>({id:a.id,f:a.fid,g:a.tag,u:a.u,pos:[+a.pos[0].toFixed(4),+a.pos[1].toFixed(4)],o:a.order||null,h:Math.round(a.hp||100),pv:a.prov,d:!!a.dead})),
+    p:PROVS.map(p=>[p.owner,p.mil,Math.round(p.captured*100)/100,p.moral==null?100:Math.round(p.moral),p.b,p.q]),
+    a:armies.map(a=>({id:a.id,f:a.fid,g:a.tag,u:a.u,pos:[+a.pos[0].toFixed(4),+a.pos[1].toFixed(4)],o:a.order||null,h:Math.round(a.hp||100),pv:a.prov,d:!!a.dead,cmo:a.cmode||null,hd:!!a.hold,he:!!a.heal})),
     seq:armSeq,humans:HUMANS.slice(),j:jurnal.slice(0,40)};
 }
 function netSync(full){
@@ -1748,9 +2027,9 @@ function netApply(d){
   if(d.mkt){mkt.oil=d.mkt.oil;mkt.mat=d.mkt.mat;mkt.food=d.mkt.food;mkt.rare=d.mkt.rare;}
   if(d.f)for(const q of d.f){const f=factions[q.i];if(!f)continue;f.money=q.mo;f.mat=q.mt;f.oil=q.oi;f.food=q.fo;f.rare=q.ra;f.mp=q.mp;f.gold=q.gd;f.alive=!!q.al;}
   if(d.rels)relAn=new Map(d.rels);
-  if(d.p)for(let i=0;i<PROVS.length&&i<d.p.length;i++){const e=d.p[i],p=PROVS[i];p.owner=e[0];p.mil=e[1];p.captured=e[2];p.b=e[3]||{};p.q=e[4]||[];}
+  if(d.p)for(let i=0;i<PROVS.length&&i<d.p.length;i++){const e=d.p[i],p=PROVS[i];p.owner=e[0];p.mil=e[1];p.captured=e[2];p.moral=e[3]==null?100:e[3];p.b=e[4]||{};p.q=e[5]||[];}
   if(d.a){
-    armies=d.a.map(q=>({id:q.id,fid:q.f,tag:q.g||'',u:q.u||{},pos:[q.pos[0],q.pos[1]],order:q.o||null,hp:q.h==null?100:q.h,prov:q.pv==null?0:q.pv,dead:!!q.d}));
+    armies=d.a.map(q=>({id:q.id,fid:q.f,tag:q.g||'',u:q.u||{},pos:[q.pos[0],q.pos[1]],order:q.o||null,hp:q.h==null?100:q.h,prov:q.pv==null?0:q.pv,dead:!!q.d,cmode:q.cmo||null,hold:!!q.hd,heal:!!q.he}));
     let mx=0;for(const a of armies)if(a.id>mx)mx=a.id;
     armSeq=Math.max(mx+1,armSeq||1);
     selected=selected.filter(id=>armies.some(a=>a.id===id&&!a.dead));
@@ -1836,6 +2115,23 @@ function netBindUI(){
 setInterval(()=>{netSync(false);},2000);
 // ---- passation des fonctions de jeu vers le reseau ----
 const _setOrder=setOrder,_declareWar=declareWar,_makePeace=makePeace,_setRel=setRel,_queueB=queueB,_buyResearch=buyResearch,_marketTrade=marketTrade,_dealSpy=dealSpy,_proposeFusion=proposeFusion,_endTurn=endTurn;
+const _attackOrder=attackOrder,_applyCombatMode=applyCombatMode,_healOrder=healOrder,_toggleHold=toggleHold;
+attackOrder=function(ids,x,y,hitId){
+  if(NET.mode==='client'&&NET.started){try{NET.conn.send({t:'cmd',c:{t:'atk',ids:[].concat(ids).map(Number),x:+x,y:+y,tg:hitId==null?-1:+hitId}});}catch(e){}}
+  return _attackOrder(ids,x,y,hitId);
+};
+applyCombatMode=function(ids,mode){
+  if(NET.mode==='client'&&NET.started){try{NET.conn.send({t:'cmd',c:{t:'amode',ids:[].concat(ids).map(Number),m:mode}});}catch(e){}}
+  return _applyCombatMode(ids,mode);
+};
+healOrder=function(ids){
+  if(NET.mode==='client'&&NET.started){try{NET.conn.send({t:'cmd',c:{t:'heal',ids:[].concat(ids).map(Number)}});}catch(e){}}
+  return _healOrder(ids);
+};
+toggleHold=function(ids){
+  if(NET.mode==='client'&&NET.started){try{NET.conn.send({t:'cmd',c:{t:'hold',ids:[].concat(ids).map(Number)}});}catch(e){}}
+  return _toggleHold(ids);
+};
 setOrder=function(ids,x,y){
   if(NET.mode==='client'&&NET.started){try{NET.conn.send({t:'cmd',c:{t:'ord',ids:[].concat(ids).map(Number),x:+x,y:+y}});}catch(e){}}
   return _setOrder(ids,x,y);
