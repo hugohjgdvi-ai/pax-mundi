@@ -140,7 +140,7 @@ h1#t1{text-shadow:0 2px 18px rgba(0,0,0,.8)}
   <div id="dayrow">
     <button class="btn spdbtn" id="pausebtn" title="Pause">⏸</button>
     <span id="turnlab">JOUR 1 · ⏱ 30s</span>
-    <button class="btn gold" id="endbtn">Fin de journée</button><span id="vtag" style="margin-left:6px;color:#5b6d7f;font-size:10px;font-family:Verdana">v11.4</span>
+    <button class="btn gold" id="endbtn">Fin de journée</button><span id="vtag" style="margin-left:6px;color:#5b6d7f;font-size:10px;font-family:Verdana">v11.5</span>
   </div>
 </div>
 <div id="provbar"></div>
@@ -1333,9 +1333,7 @@ function photoIcon(tid,svg){
   if(typeof u==='string')return u?'<img class="imgp" src="'+u+'" onerror="this.outerHTML=\''+svg.replace(/"/g,'&quot;')+'\'">':svg;
   if(window.__LIVE__&&typeof fetch==='function'){
     photoCache[art]='';
-    fetch('https://en.wikipedia.org/api/rest_v1/page/summary/'+encodeURIComponent(art))
-      .then(r=>r.json()).then(j=>{if(!j||!j.thumbnail||!j.thumbnail.source)return;photoCache[art]=j.thumbnail.source.replace(/\/([0-9]+)px-/,'/320px-');if(provSel>=0)renderProvBar();refreshWin();})
-      .catch(()=>{});
+    fetchPhotoArt(art,5);
   }
   return svg;
 }function cardHTML(icon,name,lvl,cost,tm,btn){
@@ -1884,8 +1882,31 @@ function loop(ts){
   }
   draw();
 }
+var pfPass=0;
+function pfRender(){if(provSel>=0)renderProvBar();refreshWin();}
+function fetchPhotoArt(a,tries){
+  if(tries<=0)return;
+  fetch('https://en.wikipedia.org/api/rest_v1/page/summary/'+encodeURIComponent(a))
+    .then(r=>{if(!r.ok)throw 0;return r.json();})
+    .then(j=>{if(!j||!j.thumbnail||!j.thumbnail.source)return;photoCache[a]=j.thumbnail.source.replace(/\/([0-9]+)px-/,'/320px-');pfPass++;if(pfPass%4===0)pfRender();})
+    .catch(()=>{setTimeout(()=>fetchPhotoArt(a,tries-1),1400);});
+}
+function preloadPhotos(){
+  const arts=[];const seen={};
+  [PHOTO,BPHOTO,ORDIMG].forEach(d=>{for(const k in d){const a=d[k];if(!seen[a]){seen[a]=1;arts.push(a);}}});
+  let i=0;
+  (function next(){
+    if(i>=arts.length){pfRender();return;}
+    const a=arts[i++];
+    if(typeof photoCache[a]==='string'&&photoCache[a]!=='')return setTimeout(next,60);
+    fetchPhotoArt(a,5);
+    setTimeout(next,480);
+  })();
+}
+
 function boot(){
   window.__LIVE__=true;
+  if(typeof fetch==='function')preloadPhotos();
   buildWorld();
   buildPaths();
   bindMap();
