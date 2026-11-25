@@ -62,8 +62,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);font:13px/
 .bcard{display:flex;align-items:center;gap:10px;background:#16222e;border:1px solid #263542;border-radius:6px;padding:9px 10px;margin:6px 0}
 .bcard:hover{border-color:#3a4b5c}
 .bcard.locked{background:#121b25;border-color:#2c333d}
-.bicon{width:42px;height:42px;min-width:42px;background:#0f1822;border:1px solid #263542;border-radius:6px;display:flex;align-items:center;justify-content:center}
-.svgi{width:28px;height:28px;display:block}
+.bicon{width:56px;height:56px;min-width:56px;background:#0f1822;border:1px solid #263542;border-radius:6px;display:flex;align-items:center;justify-content:center}
+.svgi{width:28px;height:28px;display:block}.bicon .svgi{width:52px;height:52px}.uhero .svgi{width:76px;height:76px}.brow .svgi{width:34px;height:34px}
 .bmain{flex:1;min-width:0}
 .btl{display:flex;align-items:baseline;gap:7px}
 .bname{font-size:12px;font-weight:bold;color:#e8e4d8;letter-spacing:.2px}
@@ -1346,7 +1346,7 @@ function renderArmyBar(){
   const U=UNITS[dom]||{};
   let hpT=0,nT=0;for(const t in tc){const TU=UNITS[t];if(!TU)continue;hpT+=(TU.hp||0)*tc[t];nT+=tc[t];}
   let h='<h3>'+(sel.length>1?sel.length+' ARMÉES SÉLECTIONNÉES':'ARMÉE — '+(U.n||''))+'</h3>';
-  h+='<div style="display:flex;gap:10px;align-items:center;margin:6px 0">'+photoIcon(dom,svgI(USVG[dom]||''))
+  h+='<div style="display:flex;gap:10px;align-items:center;margin:6px 0"><span class="uhero">'+photoIcon(dom,svgI(USVG[dom]||''))+'</span>'
    +'<div><div style="font-weight:bold">'+(U.n||'')+'</div><div class="nk">'+nT+' unités · '+hpT+' PV de bloc — clic sur un nom de troupe pour ses stats</div></div></div>';
     if(uselTid&&!tc[uselTid])uselTid=null;
   h+='<div class="pvsec"><h4>UNITÉS</h4>';
